@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>模式识别导论：第6章 Decision Trees - harry-zzh的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="harry-zzh的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="harry-zzh的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本章介绍了决策树的基本概念，选择分割节点方式的三种指标，防止过拟合的方法等。"><meta property="og:type" content="blog"><meta property="og:title" content="模式识别导论：第6章 Decision Trees"><meta property="og:url" content="http://harry-zzh.github.io/2021/05/18/PR-ch6/"><meta property="og:site_name" content="harry-zzh的博客"><meta property="og:description" content="本章介绍了决策树的基本概念，选择分割节点方式的三种指标，防止过拟合的方法等。"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://harry-zzh.github.io/img/og_image.png"><meta property="article:published_time" content="2021-05-18T06:26:22.000Z"><meta property="article:modified_time" content="2021-06-10T09:05:10.715Z"><meta property="article:author" content="harry-zzh"><meta property="article:tag" content="模式识别"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://harry-zzh.github.io/2021/05/18/PR-ch6/"},"headline":"模式识别导论：第6章 Decision Trees","image":["http://harry-zzh.github.io/img/og_image.png"],"datePublished":"2021-05-18T06:26:22.000Z","dateModified":"2021-06-10T09:05:10.715Z","author":{"@type":"Person","name":"harry-zzh"},"description":"本章介绍了决策树的基本概念，选择分割节点方式的三种指标，防止过拟合的方法等。"}</script><link rel="canonical" href="http://harry-zzh.github.io/2021/05/18/PR-ch6/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal"><i class="fas fa-angle-double-right"></i>模式识别导论：第6章 Decision Trees</h1><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><i class="far fa-calendar-alt"> </i><time dateTime="${date_xml(page.date)}" title="${date_xml(page.date)}">2021-05-18</time></span><span class="level-item is-hidden-mobile"><i class="far fa-calendar-check"> </i><time dateTime="${date_xml(page.updated)}" title="${date_xml(page.updated)}">2021-06-10</time></span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%A1%E7%A7%91/">计科</a></span><span class="level-item">5 minutes read (About 753 words)</span></div></div><div class="content"><p>本章介绍了决策树的基本概念，选择分割节点方式的三种指标，防止过拟合的方法等。<br><span id="more"></span></p>
+<h1 id="1-What-is-a-Decision-Tree"><a href="#1-What-is-a-Decision-Tree" class="headerlink" title="1. What is a Decision Tree"></a>1. What is a Decision Tree</h1><ul>
+<li>树状模型，每个分支都包含着一种决策。</li>
+<li><p><strong>Hunt’s Algorithm</strong>：</p>
+<p>  对于一个树节点，有以下几种情况：</p>
+<ul>
+<li>当包含的数据的类别相同，停止拓展，该节点为叶节点。</li>
+<li>当不包含任何数据，该节点为叶节点。</li>
+<li>当数据的类别不一致，根据某些规则继续拓展该节点。</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-How-to-Construct-a-Decision-Tree"><a href="#2-How-to-Construct-a-Decision-Tree" class="headerlink" title="2. How to Construct a Decision Tree"></a>2. How to Construct a Decision Tree</h1><p>主要有三种方式确定下一步选择哪个属性分割当前节点，倾向于选择使节点分割后更加homogeneous（同质的）。</p>
+<h2 id="2-1-Gini-Index"><a href="#2-1-Gini-Index" class="headerlink" title="2.1 Gini Index"></a>2.1 Gini Index</h2><ul>
+<li>对某个节点t，$Gini(t)=1-\sum_j^m[P(j|t) ]^2$。$j$是该节点包含的类别之一。<ul>
+<li>最大值：$1-\frac{1}{m}$，所有类别的概率相同。</li>
+<li>最小值：0。</li>
+<li>值越小，表示越homogeneous。</li>
+</ul>
+</li>
+<li>对某个节点p进行分割后，得到子节点$t_1,t_2,\cdots,t_m$，则这种分割方式的$Gini_{split}=\sum_{i=1}^m\frac{n_i}{n}Gini(t_i)$。$n$是p的数据总数，$n_i$是$t_i$子节点的数据总数。</li>
+</ul>
+<h2 id="2-2-Infomation-Gain"><a href="#2-2-Infomation-Gain" class="headerlink" title="2.2 Infomation Gain"></a>2.2 Infomation Gain</h2><ul>
+<li>先介绍Infomation Entropy（信息熵）的概念，对某个节点t，$Entropy(t)=-\sum_j^mP(j|t)logP(j|t)$。$j$是该节点包含的类别之一。<ul>
+<li>最大值：$log(m)$，所有类别的概率相同。</li>
+<li>最小值：0。</li>
+<li>值越小，表示越homogeneous。</li>
+</ul>
+</li>
+<li>对某个节点p进行分割后，得到子节点$t_1,t_2,\cdots,t_m$，则这种分割方式的$Gain_{split}=Entropy(p)-\sum_{i=1}^m\frac{n_i}{n}Entropy(t_i)$。<strong>选择信息收益最大的分割方式</strong>，意味着这种分割方式使节点的熵最小，最homogeneous。</li>
+</ul>
+<h2 id="2-3-Error-Rate"><a href="#2-3-Error-Rate" class="headerlink" title="2.3 Error Rate"></a>2.3 Error Rate</h2><ul>
+<li>对某个节点t，$Error(t)=1-max_iP(i|t)$。<ul>
+<li>最大值：$1-\frac{1}{m}$，所有类别的概率相同。</li>
+<li>最小值：0。</li>
+<li>值越小，表示越homogeneous。</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-Avoid-Overfitting"><a href="#3-Avoid-Overfitting" class="headerlink" title="3. Avoid Overfitting"></a>3. Avoid Overfitting</h1><p>预剪枝和后剪枝策略：</p>
+<h2 id="3-1-Pre-Pruning"><a href="#3-1-Pre-Pruning" class="headerlink" title="3.1 Pre-Pruning"></a>3.1 Pre-Pruning</h2><ul>
+<li>在树过于庞大之前，停止训练。</li>
+<li>在节点中的数据类别相同时，停止拓展该节点。</li>
+<li>当节点中的数据数目小于某个阈值，停止拓展该节点。</li>
+<li>当不能改善节点的纯度，停止拓展该节点。</li>
+</ul>
+<h2 id="3-2-Post-pruning"><a href="#3-2-Post-pruning" class="headerlink" title="3.2 Post-pruning"></a>3.2 Post-pruning</h2><ul>
+<li>先尽可能地拓展树，再自底向上修剪，如果修剪时发现可以改善泛化误差，则将当前节点设置为叶节点。叶节点的类别由该节点中的大部分数据所属的类别决定。</li>
+</ul>
+<h1 id="4-Summary"><a href="#4-Summary" class="headerlink" title="4. Summary"></a>4. Summary</h1><ul>
+<li>优点<ul>
+<li>容易理解和建立。</li>
+<li>对未知记录进行分类时，速度快。</li>
+<li>对离散属性的处理效率高。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>引起误差传播，泛化性能不佳。</li>
+</ul>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>模式识别导论：第6章 Decision Trees</p><p><a href="http://harry-zzh.github.io/2021/05/18/PR-ch6/">http://harry-zzh.github.io/2021/05/18/PR-ch6/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>harry-zzh</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-05-18</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-06-10</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i> <a class="link-muted" rel="tag" href="/tags/%E6%A8%A1%E5%BC%8F%E8%AF%86%E5%88%AB/">模式识别 </a></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/05/22/PR-ch7/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">模式识别导论：第7章 Ensemble</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/05/14/PR-ch5/"><span class="level-item">模式识别导论：第5章 Support Vector Machines</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="harry-zzh"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">harry-zzh</p><p class="is-size-6 is-block">华南理工大学 计科</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>广东 广州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">31</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Harry-zzh" target="_blank" rel="noopener">Follow</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-What-is-a-Decision-Tree"><span class="level-left"><span class="level-item">1. What is a Decision Tree</span></span></a></li><li><a class="level is-mobile" href="#2-How-to-Construct-a-Decision-Tree"><span class="level-left"><span class="level-item">2. How to Construct a Decision Tree</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#2-1-Gini-Index"><span class="level-left"><span class="level-item">2.1 Gini Index</span></span></a></li><li><a class="level is-mobile" href="#2-2-Infomation-Gain"><span class="level-left"><span class="level-item">2.2 Infomation Gain</span></span></a></li><li><a class="level is-mobile" href="#2-3-Error-Rate"><span class="level-left"><span class="level-item">2.3 Error Rate</span></span></a></li></ul></li><li><a class="level is-mobile" href="#3-Avoid-Overfitting"><span class="level-left"><span class="level-item">3. Avoid Overfitting</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#3-1-Pre-Pruning"><span class="level-left"><span class="level-item">3.1 Pre-Pruning</span></span></a></li><li><a class="level is-mobile" href="#3-2-Post-pruning"><span class="level-left"><span class="level-item">3.2 Post-pruning</span></span></a></li></ul></li><li><a class="level is-mobile" href="#4-Summary"><span class="level-left"><span class="level-item">4. Summary</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a><p class="is-size-7"><span>&copy; 2021 harry-zzh</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

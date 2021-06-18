@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>模式识别导论：第3章 Linear Classification Models - harry-zzh的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="harry-zzh的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="harry-zzh的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本章讲了介绍了线性分类模型，包括线性判别函数、最小二乘分类、多分类等。"><meta property="og:type" content="blog"><meta property="og:title" content="模式识别导论：第3章 Linear Classification Models"><meta property="og:url" content="http://harry-zzh.github.io/2021/04/19/PR-ch3/"><meta property="og:site_name" content="harry-zzh的博客"><meta property="og:description" content="本章讲了介绍了线性分类模型，包括线性判别函数、最小二乘分类、多分类等。"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/19/PR-ch3/One-versus-the-rest.png"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/19/PR-ch3/One-versus-one.png"><meta property="article:published_time" content="2021-04-19T12:18:10.000Z"><meta property="article:modified_time" content="2021-04-20T11:16:34.166Z"><meta property="article:author" content="harry-zzh"><meta property="article:tag" content="模式识别"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/2021/04/19/PR-ch3/One-versus-the-rest.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://harry-zzh.github.io/2021/04/19/PR-ch3/"},"headline":"模式识别导论：第3章 Linear Classification Models","image":["http://harry-zzh.github.io/2021/04/19/PR-ch3/One-versus-the-rest.png","http://harry-zzh.github.io/2021/04/19/PR-ch3/One-versus-one.png"],"datePublished":"2021-04-19T12:18:10.000Z","dateModified":"2021-04-20T11:16:34.166Z","author":{"@type":"Person","name":"harry-zzh"},"description":"本章讲了介绍了线性分类模型，包括线性判别函数、最小二乘分类、多分类等。"}</script><link rel="canonical" href="http://harry-zzh.github.io/2021/04/19/PR-ch3/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal"><i class="fas fa-angle-double-right"></i>模式识别导论：第3章 Linear Classification Models</h1><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><i class="far fa-calendar-alt"> </i><time dateTime="${date_xml(page.date)}" title="${date_xml(page.date)}">2021-04-19</time></span><span class="level-item is-hidden-mobile"><i class="far fa-calendar-check"> </i><time dateTime="${date_xml(page.updated)}" title="${date_xml(page.updated)}">2021-04-20</time></span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%A1%E7%A7%91/">计科</a></span><span class="level-item">6 minutes read (About 873 words)</span></div></div><div class="content"><p>本章讲了介绍了线性分类模型，包括线性判别函数、最小二乘分类、多分类等。<br><span id="more"></span></p>
+<h1 id="1-Parametric-VS-Non-Parametric"><a href="#1-Parametric-VS-Non-Parametric" class="headerlink" title="1. Parametric VS Non-Parametric"></a>1. Parametric VS Non-Parametric</h1><p>可以采用参数方法或非参数方法给样本做分类。</p>
+<ul>
+<li>参数方法：<strong>假设样本服从某种分布</strong>，利用样本估计参数，如上一章介绍的ML Parameter Estimation。如果假设正确，结果会很准确，否则结果很差。</li>
+<li>非参数方法：<strong>假设判别函数为某种形式，不假设样本分布</strong>。如：神经网络、SVM等。局部最优，但易于使用。</li>
+</ul>
+<h1 id="2-Linear-Classification-Models"><a href="#2-Linear-Classification-Models" class="headerlink" title="2. Linear Classification Models"></a>2. Linear Classification Models</h1><h2 id="2-1-Geometry-of-Linear-Discriminants"><a href="#2-1-Geometry-of-Linear-Discriminants" class="headerlink" title="2.1 Geometry of Linear Discriminants"></a>2.1 Geometry of Linear Discriminants</h2><ul>
+<li>对于平面内的二分类问题，判别函数$g(x)=w^Tx+w_0$，<strong>决策边界</strong>为$g(x)=0$。因为$g(x)$是线性的，所以是<strong>超平面（hyperplane）</strong>。这是判别函数的几何意义。</li>
+<li><strong>原点到决策平面的距离</strong>：$-\frac{w_0}{||w||}$<ul>
+<li>在决策平面上有两点$x_a,x_b$，则易得$w^T(x_a-x_b)=-w_0-(-w_0)=0$（在决策平面上的点的$g(x)$值为0）。所以$w^T$是<strong>垂直于决策平面的向量</strong>。</li>
+<li>设原点在决策平面上的投影为$x_0$，则向量$x_0-0=x_0$和向量$w^T$平行。</li>
+<li>故原点到$x_0$的距离，就是原点到决策平面的距离，为$\frac{w^Tx_0}{||w||}$（用到了<strong>向量内积</strong>）。$||w||$是行列式的绝对值。</li>
+<li>$x_0$是决策平面上的点，进一步化简得到$-\frac{w_0}{||w||}$。</li>
+</ul>
+</li>
+<li><strong>任一点x到决策平面的距离</strong>：$\frac{g(x)}{||w||}$<ul>
+<li>设任一点x，在决策平面上的投影为$x_0$，同上，可解得x到决策平面的距离为$\frac{w^Tx+w_0}{||w||}=\frac{g(x)}{||w||}$。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-Convexity-of-Decision-Regions"><a href="#2-2-Convexity-of-Decision-Regions" class="headerlink" title="2.2 Convexity of Decision Regions"></a>2.2 Convexity of Decision Regions</h2><ul>
+<li>决策区域的凸性，即若两点同属于一个区域，则这两点的连线上的点都属于这个区域。</li>
+</ul>
+<h2 id="2-3-Least-Squares-Classification"><a href="#2-3-Least-Squares-Classification" class="headerlink" title="2.3 Least-Squares Classification"></a>2.3 Least-Squares Classification</h2><ul>
+<li>$Xw=b$，则平方误差和公式$J_s(w)=||Xw-b||^2$。</li>
+<li>若$X$是非奇异的，则可以直接$w=X^{-1}b$。但是通常没有这么巧合。</li>
+<li><strong>Pseudo-inverse method（伪逆方法）</strong>：对平方误差和公式求导，导数为0时，求得$w=(X^TX)^{-1}X^Tb$。$X^TX$一般都是奇异矩阵，可以求逆。但不能完全保证是奇异矩阵，这时就可以写成$w =\lim_{\epsilon\to0}(X^TX+\epsilon I)^{-1}X^Tb$。</li>
+<li><strong>Least-Mean-Squares (LMS)</strong>：除了伪逆方法，还可用LMS方法计算参数。即用到了<strong>Gradient Descent（梯度下降）</strong>。平方误差和公式对$w$求导，得到$\nabla J_s(w)=2(Xw-b)X$，故更新公式$w(k+1)=w(k)+\eta\nabla J_s(w)$。因为梯度噪声，LMS方法难以得到最优值。</li>
+</ul>
+<h2 id="2-4-Generalized-Linear-Model"><a href="#2-4-Generalized-Linear-Model" class="headerlink" title="2.4 Generalized Linear Model"></a>2.4 Generalized Linear Model</h2><ul>
+<li>广义线性模型，也是一样的道理。一般用LMS方法求参数。</li>
+</ul>
+<h1 id="3-Multi-Class-Classification"><a href="#3-Multi-Class-Classification" class="headerlink" title="3. Multi-Class Classification"></a>3. Multi-Class Classification</h1><ul>
+<li>多分类问题，可以使用一些two-class classifiers：<ul>
+<li>One-versus-the-rest：划分出一个分类后，在剩下的分类里继续划分。<strong>需要c个分类器</strong>。</li>
+<li>One-versus-one：所有分类两两划分。需要<strong>c(c-1)/2个分类器</strong>。</li>
+<li>这两种方法都会导致一些区域无法被分类：<ul>
+<li>第一种：  <div style="width:40%;margin:auto"><img src="/2021/04/19/PR-ch3/One-versus-the-rest.png" class title="One-versus-the-rest"></div></li>
+<li>第二种：  <div style="width:40%;margin:auto"><img src="/2021/04/19/PR-ch3/One-versus-one.png" class title="One-versus-one"></div></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>模式识别导论：第3章 Linear Classification Models</p><p><a href="http://harry-zzh.github.io/2021/04/19/PR-ch3/">http://harry-zzh.github.io/2021/04/19/PR-ch3/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>harry-zzh</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-04-19</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-04-20</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i> <a class="link-muted" rel="tag" href="/tags/%E6%A8%A1%E5%BC%8F%E8%AF%86%E5%88%AB/">模式识别 </a></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/04/20/PR-ch4/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">模式识别导论：第4章 Neural Networks</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/04/17/PR-ch2/"><span class="level-item">模式识别导论：第2章 Bayesian Decision Theory</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="harry-zzh"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">harry-zzh</p><p class="is-size-6 is-block">华南理工大学 计科</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>广东 广州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">31</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Harry-zzh" target="_blank" rel="noopener">Follow</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-Parametric-VS-Non-Parametric"><span class="level-left"><span class="level-item">1. Parametric VS Non-Parametric</span></span></a></li><li><a class="level is-mobile" href="#2-Linear-Classification-Models"><span class="level-left"><span class="level-item">2. Linear Classification Models</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#2-1-Geometry-of-Linear-Discriminants"><span class="level-left"><span class="level-item">2.1 Geometry of Linear Discriminants</span></span></a></li><li><a class="level is-mobile" href="#2-2-Convexity-of-Decision-Regions"><span class="level-left"><span class="level-item">2.2 Convexity of Decision Regions</span></span></a></li><li><a class="level is-mobile" href="#2-3-Least-Squares-Classification"><span class="level-left"><span class="level-item">2.3 Least-Squares Classification</span></span></a></li><li><a class="level is-mobile" href="#2-4-Generalized-Linear-Model"><span class="level-left"><span class="level-item">2.4 Generalized Linear Model</span></span></a></li></ul></li><li><a class="level is-mobile" href="#3-Multi-Class-Classification"><span class="level-left"><span class="level-item">3. Multi-Class Classification</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a><p class="is-size-7"><span>&copy; 2021 harry-zzh</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

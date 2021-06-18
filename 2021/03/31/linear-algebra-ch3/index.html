@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>线性代数：第3章 矩阵的初等变换与线性方程组 - harry-zzh的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="harry-zzh的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="harry-zzh的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本章介绍了矩阵的初等变换，建立矩阵的秩的概念，并讨论了线性方程组无解、有唯一解、无限多解的充要条件，并介绍用初等变换解线性方程组的方法。"><meta property="og:type" content="blog"><meta property="og:title" content="线性代数：第3章 矩阵的初等变换与线性方程组"><meta property="og:url" content="http://harry-zzh.github.io/2021/03/31/linear-algebra-ch3/"><meta property="og:site_name" content="harry-zzh的博客"><meta property="og:description" content="本章介绍了矩阵的初等变换，建立矩阵的秩的概念，并讨论了线性方程组无解、有唯一解、无限多解的充要条件，并介绍用初等变换解线性方程组的方法。"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://harry-zzh.github.io/img/og_image.png"><meta property="article:published_time" content="2021-03-31T12:25:10.000Z"><meta property="article:modified_time" content="2021-04-05T08:10:03.072Z"><meta property="article:author" content="harry-zzh"><meta property="article:tag" content="线性代数"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://harry-zzh.github.io/2021/03/31/linear-algebra-ch3/"},"headline":"线性代数：第3章 矩阵的初等变换与线性方程组","image":["http://harry-zzh.github.io/img/og_image.png"],"datePublished":"2021-03-31T12:25:10.000Z","dateModified":"2021-04-05T08:10:03.072Z","author":{"@type":"Person","name":"harry-zzh"},"description":"本章介绍了矩阵的初等变换，建立矩阵的秩的概念，并讨论了线性方程组无解、有唯一解、无限多解的充要条件，并介绍用初等变换解线性方程组的方法。"}</script><link rel="canonical" href="http://harry-zzh.github.io/2021/03/31/linear-algebra-ch3/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal"><i class="fas fa-angle-double-right"></i>线性代数：第3章 矩阵的初等变换与线性方程组</h1><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><i class="far fa-calendar-alt"> </i><time dateTime="${date_xml(page.date)}" title="${date_xml(page.date)}">2021-03-31</time></span><span class="level-item is-hidden-mobile"><i class="far fa-calendar-check"> </i><time dateTime="${date_xml(page.updated)}" title="${date_xml(page.updated)}">2021-04-05</time></span><span class="level-item"><a class="link-muted" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></span><span class="level-item">14 minutes read (About 2103 words)</span></div></div><div class="content"><p>本章介绍了矩阵的初等变换，建立矩阵的秩的概念，并讨论了线性方程组无解、有唯一解、无限多解的充要条件，并介绍用初等变换解线性方程组的方法。<br><span id="more"></span></p>
+<h2 id="1-矩阵的初等变换"><a href="#1-矩阵的初等变换" class="headerlink" title="1. 矩阵的初等变换"></a>1. 矩阵的初等变换</h2><ul>
+<li>平常在解方程组$AX=b$ 时，只是对方程组的系数$A$和常数$b$进行运算，比如消元运算。未知数并未参与运算。所以可以将系数和常数放在同一个矩阵里，即为<strong>增广矩阵</strong>，记作$B=(A,b)$。<strong>解方程组的过程，可以转换为对矩阵$B$进行变换。</strong></li>
+<li><strong>矩阵的三种初等行变换</strong>：<ul>
+<li>对换两行。</li>
+<li>以数$k\neq 0$乘某一行的所有元。</li>
+<li>把某一行所有元的k倍，加到另一行的对应元上。</li>
+<li>注：把行换成列就是初等列变换。矩阵的行列式的值虽然经过变换，可能会变，但是并没有什么影响，因为目的不在于此。</li>
+</ul>
+</li>
+<li><strong>矩阵的等价</strong>：<ul>
+<li>如果矩阵$A$经过<strong>有限次初等行变换</strong>变成矩阵$B$，则$A$与$B$<strong>行等价</strong>，记作$A \sim^{r} B$。</li>
+<li>如果<strong>列等价</strong>，记作$A \sim^{c} B$。</li>
+<li>如果经过有限次的初等变换，则<strong>等价</strong>，记作$A \sim B$。</li>
+<li>等价关系具有反身性、对称性、传递性。</li>
+</ul>
+</li>
+<li><p>对于矩阵<strong>A</strong>：</p>
+<ul>
+<li>满足1. 非零行在零行的上面。2. 非零行的首非零元所在列在上一行（如果存在）的首非零元所在列的<strong>右边</strong>。则$A$是<strong>行阶梯形矩阵</strong>。</li>
+<li>进一步，如果还满足1. 非零行的首非零元为1。2. 首非零元所在的列的其他元为0。则$A$是<strong>行最简形矩阵</strong>。</li>
+<li>要解线性方程组，只需把增广矩阵，化为行最简形矩阵（后面会介绍更简单的方法）。<strong>行最简形矩阵是唯一确定的</strong>。</li>
+<li><p>对行最简形矩阵施以<strong>初等列变换</strong>，可得到<strong>标准形</strong>：</p>
+<script type="math/tex; mode=display">F = \left( \begin{matrix} E_{r} & O \\ O & O \end{matrix}\right)_{m \times n}</script><p>  r是行阶梯形矩阵中非零行的行数。</p>
+</li>
+</ul>
+</li>
+<li><p>为了更好地阐明矩阵初等变换的性质，引入<strong>初等矩阵</strong>的概念：由单位矩阵$E$，经过<strong>一次</strong>初等变换得到的矩阵。三种初等变换对应有三种初等矩阵：</p>
+<ul>
+<li>单位矩阵中的两行/列对换。</li>
+<li>以数$k\neq 0$乘单位矩阵某一行/列的所有元。</li>
+<li><p>把单位矩阵某一行/列所有元的k倍，加到另一行/列的对应元上。</p>
+<p>可得<strong>初等矩阵的两个性质</strong>：</p>
+</li>
+<li><p>设$A$是一个m × n矩阵，对$A$施行一次初等行变换，相当于<strong>在$A$的左边乘相应的m阶初等矩阵</strong>，即$PA$；施行一次初等列变换，相当于<strong>在$A$的右边乘相应的n阶初等矩阵</strong>,即$AQ$。</p>
+<ul>
+<li><strong>初等矩阵都是可逆的，它们的乘积也可逆。</strong></li>
+</ul>
+</li>
+<li><p>方阵$A$可逆的充要条件是，存在有限个初等矩阵$P_1,P_2,…,P_l$，使$A=P_1P_2…P_l$。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>矩阵初等变换的性质</strong>：</p>
+<p>  设$A$与$B$为m × n矩阵，那么</p>
+<ul>
+<li><p>$A \sim^{r} B$的充要条件是存在m阶<strong>可逆矩阵$P$</strong>，使$PA=B$。</p>
+<ul>
+<li>$A \sim^{r} B$ &lt;=&gt; A经过有限次初等变换变为$B$ &lt;=&gt; 存在有限个m阶初等矩阵$P_1,P_2,…,P_l$，使$P_1P_2…P_lA=B$（由初等矩阵的性质1） &lt;=&gt; 存在m阶可逆矩阵$P$，使$PA=B$。</li>
+<li>推论：<strong>方阵$A$可逆的充要条件是，$A \sim^{r} E$</strong>。因为$A$可逆，就存在一个可逆矩阵$P$，使得$PA=E$，这恰恰也是$A \sim^{r} E$的充要条件。</li>
+</ul>
+</li>
+<li><p>$A \sim^{c} B$的充要条件是存在n阶可逆矩阵$Q$，使$AQ=B$。</p>
+</li>
+<li>$A \sim B$的充要条件是存在m阶可逆矩阵$P$和n阶可逆矩阵$Q$，使$PAQ=B$。</li>
+</ul>
+</li>
+<li><p><strong>至此，得到了求解逆矩阵和有唯一解的线性方程组的重要方法（利用增广矩阵）</strong>：</p>
+<ul>
+<li><p>求方阵$A$的逆矩阵：</p>
+<p>  设有增广矩阵$(A, E)$，进行初等行变化，得到$(PA, PE)$，也就是$(PA,P)$。因为由推论可知，<strong>方阵$A$可逆的充要条件是$A \sim^{r} E$</strong>。所以$PA=E$，那么$P$就是$A^{-1}$。</p>
+<p>  这就意味着，<strong>对于矩阵$(A, E)$，当$A$经过初等行变换变为了$E$时，$E$就变成了$A^{-1}$</strong>，即为所求。</p>
+</li>
+<li><p>求方程个数和未知数个数相同的线性方程组（只有这样$A$才是方阵）：</p>
+<p>  解方程组$AX=b$ ，有增广矩阵$(A,b)$，经过初等行变化变成$(PA,Pb)$。</p>
+<p>  当$PA=E$时，$Pb=A^{-1}b$，也就是$X$，得解。</p>
+</li>
+<li><p>总结一下，就是<strong>要建立关于方阵$A$的增广矩阵，将$A$化为单位矩阵$E$时，增广矩阵右半边即为所求</strong>。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-矩阵的秩"><a href="#2-矩阵的秩" class="headerlink" title="2. 矩阵的秩"></a>2. 矩阵的秩</h2><ul>
+<li><strong>矩阵$A$的k阶子式</strong>：在$A$中任取k行与k列，位于这些行列交界处的$k^2$个元素，不改变它们在$A$中所处的位置次序而得到的$k$阶<strong>行列式</strong>。</li>
+<li><strong>矩阵的秩</strong>：设在$A$中有一个不等于0的r阶子式$D$，而它的r + 1阶子式（若存在）均为0，则矩阵的秩为<strong>r</strong>，记作$R(A)$。$D$是矩阵$A$的最高阶非零子式。<strong>行阶梯形矩阵的秩，就是非零行的行数。</strong></li>
+<li><strong>矩阵的秩的性质</strong>：<ul>
+<li>$0 \leq R(A_{m\times n})\leq min(m, n)$</li>
+<li>$R(A^T) = R(A)$（因为行列式相等）</li>
+<li>若$A\sim B$，则$R(A) = R(B)$</li>
+<li>若$P, Q$可逆，则$R(PAQ) = R(A)$（其实也就是等价的意思）</li>
+<li><strong>可逆矩阵的秩等于矩阵的阶数</strong>，因为可逆矩阵的行列式一定不为0，所以可逆矩阵又称<strong>满秩矩阵</strong>。<strong>不可逆矩阵的秩小于矩阵的阶数</strong>，所以又称为<strong>降秩矩阵</strong>。</li>
+<li>$max(R(A),R(B)) \leq R(A,B) \leq R(A) + R(B)$，这里的$(A,B)$是增广矩阵。特别的，当$B$是非零列向量时，有$R(A) \leq R(A,b) \leq R(A) + 1$。</li>
+<li>$R(A+B)\leq R(A) + R(B)$</li>
+<li>$R(AB)\leq min(R(A),R(B))$</li>
+<li>若$A_{m\times n}B_{n \times l}=O$，则$R(A)+R(B)\leq n$</li>
+<li>若$A_{m\times n}B_{n \times l}=C$，且$R(A) = n$，则$R(B)=R(C)$<ul>
+<li>矩阵$A$的秩等于它的列数，所以被称为<strong>列满秩矩阵</strong>。</li>
+<li>当$C=O$，则$R(B)=0$，则$B=O$，这一结论被称为<strong>矩阵乘法的消去律</strong>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-线性方程组的解"><a href="#3-线性方程组的解" class="headerlink" title="3. 线性方程组的解"></a>3. 线性方程组的解</h2><ul>
+<li><strong>n元线性方程组$Ax=b$</strong><ul>
+<li><strong>无解</strong>的充要条件是$R(A) &lt; R(A,b)$</li>
+<li>有<strong>唯一解</strong>的充要条件是$R(A) = R(A,b) = n$（这说明了$A$是可逆矩阵）</li>
+<li>有<strong>无限多解</strong>的充要条件是$R(A)=R(A,b) &lt; n$（未知数的个数大于有效方程数）<ul>
+<li>特殊情况：n元齐次线性方程组$Ax=0$有非零解的充要条件是$R(A)&lt; n$。不是$R(A)= n$的原因：若$R(A)= n$，则$x=A^{-1}b$只有零解($b=0$)。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>例：求解非齐次线性方程组</p>
+<script type="math/tex; mode=display">
+  \begin{cases}
+  x_1+x_2-3x_3-x_4&=1\\
+  3x_1-x_2-3x_3+4x_4&=4\\
+  x_1+5x_2-9x_3-8x_4&=0
+  \end{cases}</script><p>  解：对增广矩阵$B$施行初等行变换，得到行最简形矩阵，其中r个非零行的首非零元对应的未知数取作非自由未知数，其余n-r个未知数取作自由未知数，设为$c_1,c_2,\cdots,c_{n-r}$：</p>
+<script type="math/tex; mode=display">B=\left(
+  \begin{matrix}
+  1&1&-3&-1&1\\
+  3&-1&-3&4&4\\
+  1&5&-9&-8&0
+  \end{matrix}
+  \right)\sim\left(
+  \begin{matrix}
+  1&0&-\frac{3}{2}&\frac{3}{4}&\frac{5}{4}\\
+  0&1&-\frac{3}{2}&-\frac{7}{4}&-\frac{1}{4}\\
+  0&0&0&0&0
+  \end{matrix}
+  \right)</script><p>  即得</p>
+<script type="math/tex; mode=display">
+  \begin{cases}
+  x_1&=\frac{3}{2}c_1-\frac{3}{4}c_2+\frac{5}{4}\\
+  x_2&=\frac{3}{2}c_1+\frac{7}{4}c_2-\frac{1}{4}\\
+  x_3&=c_1\\
+  x_4&=c_2
+  \end{cases}</script><p>  也可表示成向量形式。</p>
+</li>
+<li>矩阵方程$AX=B$有解的充要条件是$R(A)=R(A,B)$。</li>
+<li>设$AB=C$，则$R(C)\leq min(R(A), R(B))$</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>线性代数：第3章 矩阵的初等变换与线性方程组</p><p><a href="http://harry-zzh.github.io/2021/03/31/linear-algebra-ch3/">http://harry-zzh.github.io/2021/03/31/linear-algebra-ch3/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>harry-zzh</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-03-31</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-04-05</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i> <a class="link-muted" rel="tag" href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/">线性代数 </a></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/03/31/inverse-matrix/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">线性代数：逆矩阵</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/03/30/linear-algebra-ch2/"><span class="level-item">线性代数：第2章 矩阵及其运算</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="harry-zzh"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">harry-zzh</p><p class="is-size-6 is-block">华南理工大学 计科</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>广东 广州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">31</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Harry-zzh" target="_blank" rel="noopener">Follow</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-矩阵的初等变换"><span class="level-left"><span class="level-item">1. 矩阵的初等变换</span></span></a></li><li><a class="level is-mobile" href="#2-矩阵的秩"><span class="level-left"><span class="level-item">2. 矩阵的秩</span></span></a></li><li><a class="level is-mobile" href="#3-线性方程组的解"><span class="level-left"><span class="level-item">3. 线性方程组的解</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a><p class="is-size-7"><span>&copy; 2021 harry-zzh</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

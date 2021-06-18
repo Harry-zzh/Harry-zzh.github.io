@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>数值分析：第1章 误差 - harry-zzh的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="harry-zzh的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="harry-zzh的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本章介绍了和误差相关的基本概念，以及数值运算需要注意的一些问题。"><meta property="og:type" content="blog"><meta property="og:title" content="数值分析：第1章 误差"><meta property="og:url" content="http://harry-zzh.github.io/2021/04/28/NA-ch1/"><meta property="og:site_name" content="harry-zzh的博客"><meta property="og:description" content="本章介绍了和误差相关的基本概念，以及数值运算需要注意的一些问题。"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/28/NA-ch1/%E8%AF%AF%E5%B7%AE%E4%BC%B0%E8%AE%A1%E5%BC%8F1.png"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/28/NA-ch1/%E8%AF%AF%E5%B7%AE%E4%BC%B0%E8%AE%A1%E5%BC%8F2.png"><meta property="article:published_time" content="2021-04-28T11:35:47.000Z"><meta property="article:modified_time" content="2021-05-04T13:56:43.559Z"><meta property="article:author" content="harry-zzh"><meta property="article:tag" content="数值分析"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/2021/04/28/NA-ch1/%E8%AF%AF%E5%B7%AE%E4%BC%B0%E8%AE%A1%E5%BC%8F1.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://harry-zzh.github.io/2021/04/28/NA-ch1/"},"headline":"数值分析：第1章 误差","image":["http://harry-zzh.github.io/2021/04/28/NA-ch1/%E8%AF%AF%E5%B7%AE%E4%BC%B0%E8%AE%A1%E5%BC%8F1.png","http://harry-zzh.github.io/2021/04/28/NA-ch1/%E8%AF%AF%E5%B7%AE%E4%BC%B0%E8%AE%A1%E5%BC%8F2.png"],"datePublished":"2021-04-28T11:35:47.000Z","dateModified":"2021-05-04T13:56:43.559Z","author":{"@type":"Person","name":"harry-zzh"},"description":"本章介绍了和误差相关的基本概念，以及数值运算需要注意的一些问题。"}</script><link rel="canonical" href="http://harry-zzh.github.io/2021/04/28/NA-ch1/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal"><i class="fas fa-angle-double-right"></i>数值分析：第1章 误差</h1><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><i class="far fa-calendar-alt"> </i><time dateTime="${date_xml(page.date)}" title="${date_xml(page.date)}">2021-04-28</time></span><span class="level-item is-hidden-mobile"><i class="far fa-calendar-check"> </i><time dateTime="${date_xml(page.updated)}" title="${date_xml(page.updated)}">2021-05-04</time></span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%A1%E7%A7%91/">计科</a></span><span class="level-item">7 minutes read (About 1021 words)</span></div></div><div class="content"><p>本章介绍了和误差相关的基本概念，以及数值运算需要注意的一些问题。<br><span id="more"></span></p>
+<h1 id="1-误差的来源"><a href="#1-误差的来源" class="headerlink" title="1. 误差的来源"></a>1. 误差的来源</h1><ul>
+<li>模型误差、观测误差、方法误差（截断误差）、舍入误差。</li>
+</ul>
+<h1 id="2-误差、误差限和有效数字"><a href="#2-误差、误差限和有效数字" class="headerlink" title="2. 误差、误差限和有效数字"></a>2. 误差、误差限和有效数字</h1><h2 id="2-1-误差"><a href="#2-1-误差" class="headerlink" title="2.1 误差"></a>2.1 误差</h2><ul>
+<li>近似值$x^{\star}$和准确值$x$的差，也可称为<strong>绝对误差</strong>。</li>
+<li><strong>记作</strong>$e^{\star}=x^{\star}-x$。也可写作$e(x^{\star})$。</li>
+<li>误差为正值时，称为强近似；为负值，称为弱近似。</li>
+</ul>
+<h2 id="2-2-误差限"><a href="#2-2-误差限" class="headerlink" title="2.2 误差限"></a>2.2 误差限</h2><ul>
+<li><strong>误差的绝对值不可能超过的某个正数</strong>。</li>
+<li><strong>记作</strong>$\epsilon^{\star}$。有$|e^{\star}|=|x^{\star}-x|\leq \epsilon^{\star}$。也可写作$\epsilon(x^{\star})$。</li>
+<li>对任何数值进行<strong>四舍五入</strong>后所得到的<strong>近似值</strong>，它的误差限是它<strong>末位的半个单位</strong>。（注意要四舍五入才符合）</li>
+</ul>
+<h2 id="2-3-有效数字"><a href="#2-3-有效数字" class="headerlink" title="2.3 有效数字"></a>2.3 有效数字</h2><ul>
+<li>若近似值$x^{\star}$的误差限为该值的<strong>某一位的半个单位</strong>，且从该位开始往左数到$x^{\star}$的<strong>最高位非0数字</strong>共有n位，则称近似值$x^{\star}$有n位有效数字。</li>
+<li>通常认为准确值有<strong>无穷多位</strong>有效数字。</li>
+</ul>
+<h2 id="2-4-有效数字与误差限的关系"><a href="#2-4-有效数字与误差限的关系" class="headerlink" title="2.4 有效数字与误差限的关系"></a>2.4 有效数字与误差限的关系</h2><ul>
+<li><p>设$x^{\star}$为准确值$x$的近似值，且将$x^{\star}$表示为（$\alpha_1\neq 0$）：</p>
+<script type="math/tex; mode=display">x^{* } = \pm 0.\alpha_1\cdots\alpha_m \times 10^p</script><p>  则<strong>误差限</strong>为$\frac{1}{2}\times10^{p-n}$，$n$为<strong>有效数字</strong>。</p>
+</li>
+<li>这也是<strong>有效数字的等价定义</strong>。</li>
+</ul>
+<h1 id="3-相对误差和相对误差限"><a href="#3-相对误差和相对误差限" class="headerlink" title="3. 相对误差和相对误差限"></a>3. 相对误差和相对误差限</h1><h2 id="3-1-相对误差"><a href="#3-1-相对误差" class="headerlink" title="3.1 相对误差"></a>3.1 相对误差</h2><ul>
+<li><strong>记作</strong>$e^{\star}_r=\frac{x^{\star}-x}{x}$，也可记作$e_r(x^{\star})$。</li>
+<li>由于实际计算中，准确值一般不知道，所以<strong>相对误差也定义为（较常用）</strong>：$e^{\star}_r=\frac{x^{\star}-x}{x^{\star}}$。也就是<strong>误差 / 近似值</strong>。</li>
+</ul>
+<h2 id="3-2-相对误差限"><a href="#3-2-相对误差限" class="headerlink" title="3.2 相对误差限"></a>3.2 相对误差限</h2><ul>
+<li>由于$|e^{\star}_r|=|\frac{x^{\star}-x}{x^{\star}}|\leq \frac{\epsilon^{\star}}{|x^{\star}|}$，则记<strong>相对误差限</strong>$\epsilon^{\star}_r=\frac{\epsilon^{\star}}{|x^{\star}|}$。也就是<strong>误差限 / 近似值的绝对值</strong>。</li>
+<li>也可记作$\epsilon_r(x^{\star})$。</li>
+</ul>
+<h2 id="3-3-相对误差限与有效数字的关系"><a href="#3-3-相对误差限与有效数字的关系" class="headerlink" title="3.3 相对误差限与有效数字的关系"></a>3.3 相对误差限与有效数字的关系</h2><ul>
+<li>若$x^{\star} = \pm 0.\alpha_1\cdots\alpha_m \times 10^p$具有$n$<strong>位有效数字</strong>，则相对误差限为：<script type="math/tex; mode=display">\epsilon^{\star}_r=\frac{\epsilon^{\star}}{|x^{\star}|}\leq\frac{1}{2\alpha_1}\times10^{-(n-1)}</script></li>
+<li><strong>有效数字位越多，相对误差限越小。</strong></li>
+<li>若$x^{\star} = \pm 0.\alpha_1\cdots\alpha_m \times 10^p$的相对误差限满足关系式$\epsilon^{\star}_r=\frac{\epsilon^{\star}}{|x^{\star}|}\leq\frac{1}{2(\alpha_1+1)}\times10^{-(n-1)}$，则$x^{\star}$有$n$<strong>位有效数字</strong>。</li>
+<li>注意到已知有效数字求相对误差限，和已知相对误差限求有效数字，<strong>不是等价的</strong>。</li>
+</ul>
+<h1 id="4-数值运算中的误差估计"><a href="#4-数值运算中的误差估计" class="headerlink" title="4. 数值运算中的误差估计"></a>4. 数值运算中的误差估计</h1><ul>
+<li>计算$f(x)$的值时，若用近似值$x^\star$代替$x$，则$f(x)$的值必定存在误差。函数$f(x)$在$x^\star$附近按泰勒公式展开，得到$f(x^\star)$的<strong>绝对误差</strong>：$e(f(x^\star))\approx f^{‘}(x^\star)e(x^\star)$。</li>
+<li>$f(x^\star)$的<strong>相对误差</strong>：$e_r(f(x^\star)) \approx \frac{f^{‘}(x^\star)e(x^\star)}{f(x^\star)}$。</li>
+<li>$f(x^\star)$的<strong>误差限</strong>：$\epsilon(f(x^\star)) \approx |f^{‘}(x^\star)|\epsilon(x^\star)$。</li>
+<li>$f(x^\star)$的<strong>相对误差限</strong>：$\epsilon_r(f(x^\star)) \approx |\frac{f^{‘}(x^\star)}{f(x^\star)}|\epsilon(x^\star)$。</li>
+<li>两个数的和、差、积、商的误差估计式：  <div style="width:50%;margin:auto">
+  <img src="/2021/04/28/NA-ch1/%E8%AF%AF%E5%B7%AE%E4%BC%B0%E8%AE%A1%E5%BC%8F1.png" class title="误差估计式1">
+  </div>
+  <div style="width:50%;margin:auto">
+  <img src="/2021/04/28/NA-ch1/%E8%AF%AF%E5%B7%AE%E4%BC%B0%E8%AE%A1%E5%BC%8F2.png" class title="误差估计式2">
+  </div>
+
+</li>
+</ul>
+<h1 id="5-数值运算中应注意的一些问题"><a href="#5-数值运算中应注意的一些问题" class="headerlink" title="5. 数值运算中应注意的一些问题"></a>5. 数值运算中应注意的一些问题</h1><ul>
+<li>避免两个相近的数相减。由$\epsilon_r(x^\star-y^\star)$的公式可知，分母较小，则相对误差限就比较大。</li>
+<li>要防止小数被大数“吃掉”而使有效数字位损失。要靠变化公式来防止有效数字位数损失。</li>
+<li>要注意减少运算的次数。</li>
+<li>避免做除数绝对值远远小于被除数绝对值的除法。</li>
+<li>要选择数值稳定的计算公式。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>数值分析：第1章 误差</p><p><a href="http://harry-zzh.github.io/2021/04/28/NA-ch1/">http://harry-zzh.github.io/2021/04/28/NA-ch1/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>harry-zzh</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-04-28</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-05-04</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i> <a class="link-muted" rel="tag" href="/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/">数值分析 </a></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/04/30/ds-tree/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">数据结构：树</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/04/25/neural-ODE/"><span class="level-item">论文阅读笔记：Neural Ordinary Differential Equations</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="harry-zzh"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">harry-zzh</p><p class="is-size-6 is-block">华南理工大学 计科</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>广东 广州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">31</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Harry-zzh" target="_blank" rel="noopener">Follow</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-误差的来源"><span class="level-left"><span class="level-item">1. 误差的来源</span></span></a></li><li><a class="level is-mobile" href="#2-误差、误差限和有效数字"><span class="level-left"><span class="level-item">2. 误差、误差限和有效数字</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#2-1-误差"><span class="level-left"><span class="level-item">2.1 误差</span></span></a></li><li><a class="level is-mobile" href="#2-2-误差限"><span class="level-left"><span class="level-item">2.2 误差限</span></span></a></li><li><a class="level is-mobile" href="#2-3-有效数字"><span class="level-left"><span class="level-item">2.3 有效数字</span></span></a></li><li><a class="level is-mobile" href="#2-4-有效数字与误差限的关系"><span class="level-left"><span class="level-item">2.4 有效数字与误差限的关系</span></span></a></li></ul></li><li><a class="level is-mobile" href="#3-相对误差和相对误差限"><span class="level-left"><span class="level-item">3. 相对误差和相对误差限</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#3-1-相对误差"><span class="level-left"><span class="level-item">3.1 相对误差</span></span></a></li><li><a class="level is-mobile" href="#3-2-相对误差限"><span class="level-left"><span class="level-item">3.2 相对误差限</span></span></a></li><li><a class="level is-mobile" href="#3-3-相对误差限与有效数字的关系"><span class="level-left"><span class="level-item">3.3 相对误差限与有效数字的关系</span></span></a></li></ul></li><li><a class="level is-mobile" href="#4-数值运算中的误差估计"><span class="level-left"><span class="level-item">4. 数值运算中的误差估计</span></span></a></li><li><a class="level is-mobile" href="#5-数值运算中应注意的一些问题"><span class="level-left"><span class="level-item">5. 数值运算中应注意的一些问题</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a><p class="is-size-7"><span>&copy; 2021 harry-zzh</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

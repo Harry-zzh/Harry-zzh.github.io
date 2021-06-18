@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>数值分析：第6章 解线性代数方程组的迭代法 - harry-zzh的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="harry-zzh的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="harry-zzh的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="上一章解线性代数方程组的直接法，时间复杂度都是$O(n^3)$，当$n$较大时，计算量比较大。而迭代法的基本思想是构造一个向量序列$X^{(n)}$，使其能够收敛到某个极限向量$X^\star$，即为要求的方程组的准确解。本章主要介绍常用的迭代法和迭代收敛的条件。"><meta property="og:type" content="blog"><meta property="og:title" content="数值分析：第6章 解线性代数方程组的迭代法"><meta property="og:url" content="http://harry-zzh.github.io/2021/05/09/NA-ch6/"><meta property="og:site_name" content="harry-zzh的博客"><meta property="og:description" content="上一章解线性代数方程组的直接法，时间复杂度都是$O(n^3)$，当$n$较大时，计算量比较大。而迭代法的基本思想是构造一个向量序列$X^{(n)}$，使其能够收敛到某个极限向量$X^\star$，即为要求的方程组的准确解。本章主要介绍常用的迭代法和迭代收敛的条件。"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://harry-zzh.github.io/2021/05/09/NA-ch6/%E7%AE%80%E5%8D%95%E8%BF%AD%E4%BB%A3%E6%B3%951.png"><meta property="og:image" content="http://harry-zzh.github.io/2021/05/09/NA-ch6/%E7%AE%80%E5%8D%95%E8%BF%AD%E4%BB%A3%E6%B3%952.png"><meta property="article:published_time" content="2021-05-09T07:20:13.000Z"><meta property="article:modified_time" content="2021-05-31T12:52:18.145Z"><meta property="article:author" content="harry-zzh"><meta property="article:tag" content="数值分析"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/2021/05/09/NA-ch6/%E7%AE%80%E5%8D%95%E8%BF%AD%E4%BB%A3%E6%B3%951.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://harry-zzh.github.io/2021/05/09/NA-ch6/"},"headline":"数值分析：第6章 解线性代数方程组的迭代法","image":["http://harry-zzh.github.io/2021/05/09/NA-ch6/%E7%AE%80%E5%8D%95%E8%BF%AD%E4%BB%A3%E6%B3%951.png","http://harry-zzh.github.io/2021/05/09/NA-ch6/%E7%AE%80%E5%8D%95%E8%BF%AD%E4%BB%A3%E6%B3%952.png"],"datePublished":"2021-05-09T07:20:13.000Z","dateModified":"2021-05-31T12:52:18.145Z","author":{"@type":"Person","name":"harry-zzh"},"description":"上一章解线性代数方程组的直接法，时间复杂度都是$O(n^3)$，当$n$较大时，计算量比较大。而迭代法的基本思想是构造一个向量序列$X^{(n)}$，使其能够收敛到某个极限向量$X^\\star$，即为要求的方程组的准确解。本章主要介绍常用的迭代法和迭代收敛的条件。"}</script><link rel="canonical" href="http://harry-zzh.github.io/2021/05/09/NA-ch6/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal"><i class="fas fa-angle-double-right"></i>数值分析：第6章 解线性代数方程组的迭代法</h1><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><i class="far fa-calendar-alt"> </i><time dateTime="${date_xml(page.date)}" title="${date_xml(page.date)}">2021-05-09</time></span><span class="level-item is-hidden-mobile"><i class="far fa-calendar-check"> </i><time dateTime="${date_xml(page.updated)}" title="${date_xml(page.updated)}">2021-05-31</time></span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%A1%E7%A7%91/">计科</a></span><span class="level-item">10 minutes read (About 1449 words)</span></div></div><div class="content"><p>上一章解线性代数方程组的直接法，时间复杂度都是$O(n^3)$，当$n$较大时，计算量比较大。而迭代法的基本思想是构造一个向量序列$X^{(n)}$，使其能够收敛到某个极限向量$X^\star$，即为要求的方程组的准确解。本章主要介绍常用的迭代法和迭代收敛的条件。<br><span id="more"></span></p>
+<h1 id="1-几种常见的迭代格式"><a href="#1-几种常见的迭代格式" class="headerlink" title="1. 几种常见的迭代格式"></a>1. 几种常见的迭代格式</h1><h2 id="1-1-简单迭代法（Jacobi迭代）"><a href="#1-1-简单迭代法（Jacobi迭代）" class="headerlink" title="1.1 简单迭代法（Jacobi迭代）"></a>1.1 简单迭代法（Jacobi迭代）</h2><p>（由于数学公式较多，直接贴书上的图）<br>    <div style="width:60%;margin:auto">
+    <img src="/2021/05/09/NA-ch6/%E7%AE%80%E5%8D%95%E8%BF%AD%E4%BB%A3%E6%B3%951.png" class title="简单迭代法">
+    </div><br>    <div style="width:60%;margin:auto">
+    <img src="/2021/05/09/NA-ch6/%E7%AE%80%E5%8D%95%E8%BF%AD%E4%BB%A3%E6%B3%952.png" class title="简单迭代法">
+    </div></p>
+<ul>
+<li><strong>迭代格式</strong>：$X^{(k+1)}=BX^{(k)}+g$。$B=D^{-1}(D-A)$为Jacobi迭代的<strong>迭代矩阵</strong>。</li>
+</ul>
+<h2 id="1-2-Seidel迭代法"><a href="#1-2-Seidel迭代法" class="headerlink" title="1.2 Seidel迭代法"></a>1.2 Seidel迭代法</h2><ul>
+<li>将Jacobi迭代的迭代矩阵$B$分解为$L+U$，$L$是下三角矩阵，$U$是上三角矩阵。</li>
+<li><strong>迭代格式</strong>：$X^{(k+1)}=LX^{(k+1)}+UX^{(k)}+g$。注意到<strong>计算第$i$个分量$x_i^{(k+1)}$时，前面的$i-1$个分量用的是本次迭代新算出的$x_1^{(k+1)},\cdots,x_{i-1}^{(k+1)}$</strong>，有可能提高收敛速度。</li>
+<li><strong>标准的迭代格式</strong>：可将上式右边第一项移至左边，得$X^{(k+1)}=(I-L)^{-1}UX^{(k)}+(I-L)^{-1}g$，$(I-L)^{-1}U$为Seidel迭代法的<strong>迭代矩阵</strong>。</li>
+</ul>
+<h2 id="1-3-松弛法（SOR迭代）"><a href="#1-3-松弛法（SOR迭代）" class="headerlink" title="1.3 松弛法（SOR迭代）"></a>1.3 松弛法（SOR迭代）</h2><ul>
+<li>松弛法可看作是Seidel迭代法的加速，<strong>Seidel迭代法是松弛法的特例</strong>。由Seidel迭代法得到$\Delta X=X^{(k+1)}-X^{(k)}=LX^{(k+1)}+UX^{(k)}+g-X^{(k)}$。于是$X^{(k+1)}=X^{(k)}+\Delta X$。</li>
+<li><strong>迭代格式</strong>：为修正项加上一个参数$w$，就得到松弛法的迭代格式。即$X^{(k+1)}=X^{(k)}+w\Delta X=(1-w)X^{(k)}+w(LX^{(k+1)}+UX^{(k)}+g)$。$w$为<strong>松弛因子</strong>，大于1为超松弛，小于1为低松弛，等于1为Seidel迭代法。</li>
+<li><strong>标准的迭代格式</strong>：$X^{(k+1)}=(1-wL)^{-1}[(1 - w)I+wU]X^{(k)}+w(I-wL)^{-1}g$。$(1-wL)^{-1}[(1 - w)I+wU]$是<strong>迭代矩阵</strong>。</li>
+</ul>
+<h1 id="2-迭代法收敛性理论"><a href="#2-迭代法收敛性理论" class="headerlink" title="2. 迭代法收敛性理论"></a>2. 迭代法收敛性理论</h1><ul>
+<li>定理1：对任何初始向量$X^{0}$和常数项$f$，由迭代格式$X^{(k+1)}=MX^{(k)}+f$，产生的向量序列$\{X^{(k)}\}$收敛的<strong>充要条件</strong>是<strong>迭代矩阵</strong>$M$的<strong>谱半径</strong>$\rho(M)&lt;1$。<ul>
+<li>这里的$M$是迭代矩阵，故给定的迭代格式要<strong>先化为标准格式</strong>。</li>
+<li>谱半径是矩阵最大特征值的绝对值。</li>
+</ul>
+</li>
+<li>定理2：若迭代矩阵$M$的范数$||M||=q&lt;1$，则迭代格式$X^{(k+1)}=MX^{(k)}+f$对任何初始向量$X^{0}$一定收敛，且$||X^{(k)}-X^\star||\leq \frac{q}{1-q}||X^{(k)}-X^{(k-1)}||\leq \frac{q^k}{1-q}||X^{(1)}-X^{(0)}||$。<ul>
+<li>由于谱半径$\rho(M)$往往难以计算，但由于谱半径不大于矩阵范数，所以可以用$||M||$来估计。但定理2只是<strong>充分条件</strong>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-1-三种迭代法迭代矩阵的谱半径与系数矩阵的关系"><a href="#2-1-三种迭代法迭代矩阵的谱半径与系数矩阵的关系" class="headerlink" title="2.1 三种迭代法迭代矩阵的谱半径与系数矩阵的关系"></a>2.1 三种迭代法迭代矩阵的谱半径与系数矩阵的关系</h2><h3 id="2-1-1-Jacobi迭代"><a href="#2-1-1-Jacobi迭代" class="headerlink" title="2.1.1 Jacobi迭代"></a>2.1.1 Jacobi迭代</h3><ul>
+<li>$B=D^{-1}(D-A)$为Jacobi迭代的<strong>迭代矩阵</strong>，由$|\lambda I-B|=0$，得<script type="math/tex; mode=display">
+  \left| 
+  \begin{matrix} 
+  \lambda a_{11} &a_{12} &\cdots &a_{1n} \\
+  a_{21} &\lambda a_{22} &\cdots &a_{2n} \\
+  \vdots & \vdots & &\vdots \\
+  a_{n1} &a_{n2} &\cdots &\lambda a_{nn} 
+  \end{matrix}
+  \right| = 0</script></li>
+<li>定理3：Jacobi迭代收敛的<strong>充要条件</strong>是上述行列式的所有根$\lambda_i$的<strong>绝对值（复数理解为模）小于1</strong>。因为谱半径是最大特征值的模，需要小于1。</li>
+</ul>
+<h3 id="2-1-2-Seidel迭代"><a href="#2-1-2-Seidel迭代" class="headerlink" title="2.1.2 Seidel迭代"></a>2.1.2 Seidel迭代</h3><ul>
+<li>$(I-L)^{-1}U$为Seidel迭代法的<strong>迭代矩阵</strong>，由$|\lambda I-B|=0$，得<script type="math/tex; mode=display">
+  \left| 
+  \begin{matrix} 
+  \lambda a_{11} &a_{12} &\cdots &a_{1n} \\
+  \lambda a_{21} &\lambda a_{22} &\cdots &a_{2n} \\
+  \vdots & \vdots & &\vdots \\
+  \lambda a_{n1} &\lambda a_{n2} &\cdots &\lambda a_{nn} 
+  \end{matrix}
+  \right| = 0</script></li>
+<li>定理4：Seidel迭代收敛的<strong>充要条件</strong>是上述行列式的所有根$\lambda_i$的<strong>绝对值（复数理解为模）小于1</strong>。</li>
+</ul>
+<h3 id="2-1-3-松弛法（SOR迭代）"><a href="#2-1-3-松弛法（SOR迭代）" class="headerlink" title="2.1.3 松弛法（SOR迭代）"></a>2.1.3 松弛法（SOR迭代）</h3><ul>
+<li><p>$(1-wL)^{-1}[(1 - w)I+wU]$是松弛法的<strong>迭代矩阵</strong>，由$|\lambda I-B|=0$，得</p>
+<script type="math/tex; mode=display">
+  \left| 
+  \begin{matrix} 
+  (\lambda+w-1) a_{11} &w a_{12} &\cdots &wa_{1n} \\
+  w\lambda a_{21} &(\lambda+w-1) a_{22} &\cdots &wa_{2n} \\
+  \vdots & \vdots & &\vdots \\
+  w\lambda a_{n1} &w\lambda a_{n2} &\cdots &(\lambda+w-1) a_{nn} 
+  \end{matrix}
+  \right| = 0</script><p>  注：下三角和上三角是有细微区别的。</p>
+</li>
+<li>定理5：松弛法收敛的<strong>充要条件</strong>是上述行列式的所有根$\lambda_i$的<strong>绝对值（复数理解为模）小于1</strong>。</li>
+</ul>
+<h3 id="2-1-4-特别的判定方法"><a href="#2-1-4-特别的判定方法" class="headerlink" title="2.1.4 特别的判定方法"></a>2.1.4 特别的判定方法</h3><ul>
+<li>若$A$是<strong>强对角占优，或弱对角占优不可约</strong>，则：Jacobi迭代、Seidel迭代一定收敛；若松弛因子$w$满足$0&lt; w \leq 1$，则松弛迭代一定收敛。<ul>
+<li>不可约的定义：如果矩阵$A$不能通过行、列变换变成$\left[\begin{matrix} A_{11} &amp; A_{12}\\ 0 &amp; A_{22}\end{matrix}\right  ]$，其中$A_{11},A_{12}$为方阵，则称$A$不可约。不可约的充要条件是$A$矩阵对应的邻接图是强连通图。</li>
+<li>强对角和弱对角占优：如果矩阵$A$满足$|a_{ii}|\geq \sum_{i \neq j}|a_{ij}|$，且<strong>至少有一个$i$值</strong>使之严格成立，则称矩阵$A$具有<strong>对角优势（又称为弱对角占优）</strong>。如果所有$i$值都使之严格成立，则$A$具有<strong>强对角占优</strong>。若$A$强对角占优，或弱对角占优不可约，则$det(A)\neq 0$。</li>
+</ul>
+</li>
+<li>松弛法收敛的<strong>必要条件</strong>是$0 &lt; w &lt; 2$。</li>
+<li>若矩阵$A$<strong>对称</strong>且<strong>对角线元素</strong>均为<strong>正实数</strong>，则当$0 &lt; w &lt; 2$时，松弛法收敛的<strong>充要条件</strong>是$A$正定。</li>
+<li>设$A$为分块三对角阵，且$a_{ii}\neq 0$。Jacobi迭代的迭代矩阵$B$的特征值为实值，且$0 &lt; \rho(B) &lt; 1$。则当$0 &lt; w &lt; 2$时，SOR法迭代收敛，最优松弛因子（使收敛最快的因子）$W_{opt}=\frac{2}{1+\sqrt(1-\rho^2(B))}$。</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>数值分析：第6章 解线性代数方程组的迭代法</p><p><a href="http://harry-zzh.github.io/2021/05/09/NA-ch6/">http://harry-zzh.github.io/2021/05/09/NA-ch6/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>harry-zzh</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-05-09</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-05-31</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i> <a class="link-muted" rel="tag" href="/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/">数值分析 </a></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/05/13/NA-ch7/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">数值分析：第7章 非线性方程和非线性方程组的数值解</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/05/09/NA-ch5/"><span class="level-item">数值分析：第5章 解线性代数方程组的直接法</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="harry-zzh"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">harry-zzh</p><p class="is-size-6 is-block">华南理工大学 计科</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>广东 广州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">31</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Harry-zzh" target="_blank" rel="noopener">Follow</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-几种常见的迭代格式"><span class="level-left"><span class="level-item">1. 几种常见的迭代格式</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-1-简单迭代法（Jacobi迭代）"><span class="level-left"><span class="level-item">1.1 简单迭代法（Jacobi迭代）</span></span></a></li><li><a class="level is-mobile" href="#1-2-Seidel迭代法"><span class="level-left"><span class="level-item">1.2 Seidel迭代法</span></span></a></li><li><a class="level is-mobile" href="#1-3-松弛法（SOR迭代）"><span class="level-left"><span class="level-item">1.3 松弛法（SOR迭代）</span></span></a></li></ul></li><li><a class="level is-mobile" href="#2-迭代法收敛性理论"><span class="level-left"><span class="level-item">2. 迭代法收敛性理论</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#2-1-三种迭代法迭代矩阵的谱半径与系数矩阵的关系"><span class="level-left"><span class="level-item">2.1 三种迭代法迭代矩阵的谱半径与系数矩阵的关系</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#2-1-1-Jacobi迭代"><span class="level-left"><span class="level-item">2.1.1 Jacobi迭代</span></span></a></li><li><a class="level is-mobile" href="#2-1-2-Seidel迭代"><span class="level-left"><span class="level-item">2.1.2 Seidel迭代</span></span></a></li><li><a class="level is-mobile" href="#2-1-3-松弛法（SOR迭代）"><span class="level-left"><span class="level-item">2.1.3 松弛法（SOR迭代）</span></span></a></li><li><a class="level is-mobile" href="#2-1-4-特别的判定方法"><span class="level-left"><span class="level-item">2.1.4 特别的判定方法</span></span></a></li></ul></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a><p class="is-size-7"><span>&copy; 2021 harry-zzh</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

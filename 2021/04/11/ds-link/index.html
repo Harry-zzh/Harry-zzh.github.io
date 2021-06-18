@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>数据结构：链表、栈、队列 - harry-zzh的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="harry-zzh的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="harry-zzh的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本章总结链表、栈、队列的基础知识，以及具体题型。参考了老师上课的课件和在leetcode刷的相关题目。"><meta property="og:type" content="blog"><meta property="og:title" content="数据结构：链表、栈、队列"><meta property="og:url" content="http://harry-zzh.github.io/2021/04/11/ds-link/"><meta property="og:site_name" content="harry-zzh的博客"><meta property="og:description" content="本章总结链表、栈、队列的基础知识，以及具体题型。参考了老师上课的课件和在leetcode刷的相关题目。"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/11/ds-link/circular-queue.PNG"><meta property="article:published_time" content="2021-04-11T03:01:59.000Z"><meta property="article:modified_time" content="2021-04-15T03:42:19.011Z"><meta property="article:author" content="harry-zzh"><meta property="article:tag" content="数据结构"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/2021/04/11/ds-link/circular-queue.PNG"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://harry-zzh.github.io/2021/04/11/ds-link/"},"headline":"数据结构：链表、栈、队列","image":[],"datePublished":"2021-04-11T03:01:59.000Z","dateModified":"2021-04-15T03:42:19.011Z","author":{"@type":"Person","name":"harry-zzh"},"description":"本章总结链表、栈、队列的基础知识，以及具体题型。参考了老师上课的课件和在leetcode刷的相关题目。"}</script><link rel="canonical" href="http://harry-zzh.github.io/2021/04/11/ds-link/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal"><i class="fas fa-angle-double-right"></i>数据结构：链表、栈、队列</h1><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><i class="far fa-calendar-alt"> </i><time dateTime="${date_xml(page.date)}" title="${date_xml(page.date)}">2021-04-11</time></span><span class="level-item is-hidden-mobile"><i class="far fa-calendar-check"> </i><time dateTime="${date_xml(page.updated)}" title="${date_xml(page.updated)}">2021-04-15</time></span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%A1%E7%A7%91/">计科</a></span><span class="level-item">9 minutes read (About 1390 words)</span></div></div><div class="content"><p>本章总结链表、栈、队列的基础知识，以及具体题型。参考了老师上课的课件和在leetcode刷的相关题目。<br><span id="more"></span></p>
+<h2 id="1-链表"><a href="#1-链表" class="headerlink" title="1. 链表"></a>1. 链表</h2><h3 id="1-1-基础知识"><a href="#1-1-基础知识" class="headerlink" title="1.1 基础知识"></a>1.1 基础知识</h3><ul>
+<li><p>链表的实现：基于数组(Array-based)或基于链接(Linked-based)。</p>
+<p>  <strong>时间复杂度</strong>对比：</p>
+</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">操作</th>
+<th style="text-align:center">Array-based</th>
+<th style="text-align:center">Linked-based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">插入</td>
+<td style="text-align:center">O(n)</td>
+<td style="text-align:center">O(1)</td>
+</tr>
+<tr>
+<td style="text-align:center">删除</td>
+<td style="text-align:center">O(n)</td>
+<td style="text-align:center">O(1)</td>
+</tr>
+<tr>
+<td style="text-align:center">寻值</td>
+<td style="text-align:center">O(1)</td>
+<td style="text-align:center">O(n)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<pre><code>注：Linked-based的插入和删除操作的时间复杂度，没有算入寻值的时间复杂度。
+</code></pre><ul>
+<li><p><strong>freelist</strong>：对于Linked-based实现的链表，每次插入或删除某值时，都要调用new或delete函数来增添或删除节点，造成时间浪费。</p>
+<p>  所以，要删除某值时，将其对应的节点作为<strong>空闲节点</strong>，放在一个freelist里，当要插入新元素时，取freelist的头节点，来存放新元素，可以<strong>重复利用，节约时间</strong>。</p>
+</li>
+<li><p>双向链表：对于Linked-based实现的链表，找前一个节点更方便。</p>
+</li>
+</ul>
+<h3 id="1-2-题目"><a href="#1-2-题目" class="headerlink" title="1.2 题目"></a>1.2 题目</h3><p>默认是Linked-based的链表。</p>
+<ul>
+<li><p><strong>获取倒数第k个元素</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/">剑指 Offer 22 链表中倒数第k个节点</a></li>
+<li>可以用<strong>双指针</strong>的做法：设有两个指针，初始时均指向头结点。先让快指针移动 k 次，此时，快慢指针的距离为 k 。然后，同时移动快慢指针，直到快指针指向空，此时慢指针即指向倒数第 k 个结点。</li>
+</ul>
+</li>
+<li><p><strong>获取中间元素</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/middle-of-the-linked-list/">876 链表的中间结点</a></li>
+<li>可以用<strong>双指针</strong>的做法，不过和上一题有所不同：慢指针每次移动一次，快指针每次移动两次，当快指针无法移动两次（即快指针指向末尾节点或指向空），则慢指针指向了链表的中间节点（链表长度为偶数时指向靠后的那一个）。</li>
+<li>原因：快指针走过的路程是慢指针的两倍。</li>
+</ul>
+</li>
+<li><p><strong>判断链表是否有环</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/linked-list-cycle/">141 环形链表</a></li>
+<li>可以用<strong>双指针</strong>的做法：慢指针每次移动一次，快指针每次移动两次，当一个链表有环时，快慢指针都会陷入环中进行无限次移动，变成追及问题。快指针速度比慢指针快，总会追上慢指针，相遇时，两次相遇间的移动次数即为环的长度。</li>
+<li>参考题解：<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/linked-list-cycle/solution/yi-wen-gao-ding-chang-jian-de-lian-biao-wen-ti-h-2/">https://leetcode-cn.com/problems/linked-list-cycle/solution/yi-wen-gao-ding-chang-jian-de-lian-biao-wen-ti-h-2/</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>反转链表</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/reverse-linked-list/">206 反转链表</a></li>
+<li>可以用<strong>迭代或递归</strong>的做法。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-栈"><a href="#2-栈" class="headerlink" title="2. 栈"></a>2. 栈</h2><h3 id="2-1-基础知识"><a href="#2-1-基础知识" class="headerlink" title="2.1 基础知识"></a>2.1 基础知识</h3><p>栈具有<strong>后进先出</strong>的特性，常用在有<strong>配对</strong>关系的场景，比如括号匹配。函数的递归调用，实则是把每一次调用的变量等保存在了一个栈里。</p>
+<h3 id="2-2-题目"><a href="#2-2-题目" class="headerlink" title="2.2 题目"></a>2.2 题目</h3><ul>
+<li>有<strong>配对</strong>关系的场景<ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/remove-all-adjacent-duplicates-in-string/">1047. 删除字符串中的所有相邻重复项</a></li>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/backspace-string-compare/">844. 比较含退格的字符串</a> 这道题也可以用双指针法做。</li>
+</ul>
+</li>
+<li><strong>单调栈</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/next-greater-element-i/">496. 下一个更大元素 I</a>，<a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/next-greater-element-ii/">503. 下一个更大元素 II</a></li>
+<li>单调栈一般用于寻找在当前元素之后，且比它大或小的元素。</li>
+</ul>
+</li>
+<li><strong>用栈实现队列</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/yong-liang-ge-zhan-shi-xian-dui-lie-lcof/">剑指 Offer 09. 用两个栈实现队列</a></li>
+<li>用两个栈，一个专门负责入列，一个专门负责出列。</li>
+</ul>
+</li>
+<li><strong>用队列实现栈</strong><ul>
+<li><a target="_blank" rel="noopener" href="https://leetcode-cn.com/problems/implement-stack-using-queues/">225. 用队列实现栈</a></li>
+<li>可以用一个队列，在插入新元素后，弹出原来所有元素，并将它们按顺序重新插入到队列，这样可以使最后插入的元素保持在队列最前面。也可以用两个队列实现以上效果。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-队列"><a href="#3-队列" class="headerlink" title="3. 队列"></a>3. 队列</h2><h3 id="3-1-基础知识"><a href="#3-1-基础知识" class="headerlink" title="3.1 基础知识"></a>3.1 基础知识</h3><p>队列具有<strong>先进先出</strong>的特性，如果是基于数组的队列，一般采用<strong>环形数组</strong>实现。</p>
+<p>为什么基于数组的栈不需要环形数组？因为栈是后进先出，不会影响整体的空间结构。队列，先进先出，所以要用两个变量记录队列的头和尾，当弹出队列头对应的数后，队列头后移。如果不用环形数组，前面的空间会被浪费。<br><img src="/2021/04/11/ds-link/circular-queue.PNG" alt="circular-queue"></p>
+<p><strong>插入新元素：(rear + 1) % size</strong>，如果不对size取模，那么数组会超界，要循环利用数组的空间。</p>
+<p><strong>数组元素个数：（rear + 1 + size - front）% size</strong>。因为当rear &gt;= front 时，数组元素个数为rear + 1 - front；当rear &lt; front时，数组元素个数为rear + size + 1 - front。两种情况合并，则为上式。</p>
+<p><strong>队列满或空</strong>时，条件都是front == (rear + 1) % size（可画个图看看），不能区分。所以，如果数组大小为n，那么就只存储<strong>n - 1</strong>个元素。这样，当<strong>front == (rear + 1) % size</strong> 时，队列是空的；<strong>front == (rear + 2) % size</strong> 时，队列是满的。</p>
+</div><div class="article-licensing box"><div class="licensing-title"><p>数据结构：链表、栈、队列</p><p><a href="http://harry-zzh.github.io/2021/04/11/ds-link/">http://harry-zzh.github.io/2021/04/11/ds-link/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>harry-zzh</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-04-11</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-04-15</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i> <a class="link-muted" rel="tag" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构 </a></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/04/12/linear-algebra-ch5/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">线性代数：第5章 相似矩阵及二次型</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/04/08/survey-prediction%EF%BC%883%EF%BC%89/"><span class="level-item">论文阅读笔记：不规则采样时间序列的预测任务（3）</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="harry-zzh"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">harry-zzh</p><p class="is-size-6 is-block">华南理工大学 计科</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>广东 广州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">31</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Harry-zzh" target="_blank" rel="noopener">Follow</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-链表"><span class="level-left"><span class="level-item">1. 链表</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#1-1-基础知识"><span class="level-left"><span class="level-item">1.1 基础知识</span></span></a></li><li><a class="level is-mobile" href="#1-2-题目"><span class="level-left"><span class="level-item">1.2 题目</span></span></a></li></ul></li><li><a class="level is-mobile" href="#2-栈"><span class="level-left"><span class="level-item">2. 栈</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#2-1-基础知识"><span class="level-left"><span class="level-item">2.1 基础知识</span></span></a></li><li><a class="level is-mobile" href="#2-2-题目"><span class="level-left"><span class="level-item">2.2 题目</span></span></a></li></ul></li><li><a class="level is-mobile" href="#3-队列"><span class="level-left"><span class="level-item">3. 队列</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#3-1-基础知识"><span class="level-left"><span class="level-item">3.1 基础知识</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a><p class="is-size-7"><span>&copy; 2021 harry-zzh</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

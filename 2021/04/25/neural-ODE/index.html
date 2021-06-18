@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>论文阅读笔记：Neural Ordinary Differential Equations - harry-zzh的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="harry-zzh的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="harry-zzh的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="这周了解了一个比较热门的模型：Neural Ordinary Differential Equations（神经ODE方程）。它是一种全新的神经网络结构，层与层之间不再是离散的，而是连续的。这一特性使之能更好地应用于不规则采样时间序列的处理。"><meta property="og:type" content="blog"><meta property="og:title" content="论文阅读笔记：Neural Ordinary Differential Equations"><meta property="og:url" content="http://harry-zzh.github.io/2021/04/25/neural-ODE/"><meta property="og:site_name" content="harry-zzh的博客"><meta property="og:description" content="这周了解了一个比较热门的模型：Neural Ordinary Differential Equations（神经ODE方程）。它是一种全新的神经网络结构，层与层之间不再是离散的，而是连续的。这一特性使之能更好地应用于不规则采样时间序列的处理。"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/25/neural-ODE/Backward-propagation.PNG"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/25/neural-ODE/latent-ODE.PNG"><meta property="article:published_time" content="2021-04-25T05:36:32.000Z"><meta property="article:modified_time" content="2021-04-25T10:33:43.784Z"><meta property="article:author" content="harry-zzh"><meta property="article:tag" content="不规则采样"><meta property="article:tag" content="时间序列"><meta property="article:tag" content="srp周报"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/2021/04/25/neural-ODE/Backward-propagation.PNG"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://harry-zzh.github.io/2021/04/25/neural-ODE/"},"headline":"论文阅读笔记：Neural Ordinary Differential Equations","image":[],"datePublished":"2021-04-25T05:36:32.000Z","dateModified":"2021-04-25T10:33:43.784Z","author":{"@type":"Person","name":"harry-zzh"},"description":"这周了解了一个比较热门的模型：Neural Ordinary Differential Equations（神经ODE方程）。它是一种全新的神经网络结构，层与层之间不再是离散的，而是连续的。这一特性使之能更好地应用于不规则采样时间序列的处理。"}</script><link rel="canonical" href="http://harry-zzh.github.io/2021/04/25/neural-ODE/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal"><i class="fas fa-angle-double-right"></i>论文阅读笔记：Neural Ordinary Differential Equations</h1><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><i class="far fa-calendar-alt"> </i><time dateTime="${date_xml(page.date)}" title="${date_xml(page.date)}">2021-04-25</time></span><span class="level-item is-hidden-mobile"><i class="far fa-calendar-check"> </i><time dateTime="${date_xml(page.updated)}" title="${date_xml(page.updated)}">2021-04-25</time></span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/">论文阅读笔记</a></span><span class="level-item">10 minutes read (About 1519 words)</span></div></div><div class="content"><p>这周了解了一个比较热门的模型：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1806.07366">Neural Ordinary Differential Equations（神经ODE方程）</a>。它是一种全新的神经网络结构，层与层之间不再是离散的，而是连续的。这一特性使之能更好地应用于不规则采样时间序列的处理。<br><span id="more"></span></p>
+<h1 id="1-结构"><a href="#1-结构" class="headerlink" title="1. 结构"></a>1. 结构</h1><ul>
+<li>许多神经网络模型，如残差网络、RNN等，都是通过一系列的转换来获得隐层状态。而残差网络的隐层状态计算可以表示为：<script type="math/tex; mode=display">h_{t+1}=h_t +f(h_t,\theta_t)</script></li>
+<li><p>如果添加无限增加隐含层数，无限缩小时间步，则上式可转换为<strong>常微分方程</strong>：</p>
+<script type="math/tex; mode=display">\frac{dh(t)}{dt}=f(h_t,t,\theta)</script><p>  若有初始状态$h(0)$，则T时刻的状态$h(T)$可通过求解上述常微分方程得到。现在已有很成熟的ODE求解器，可直接将之当成黑盒使用。</p>
+<p>  这就是神经ODE的<strong>基本思路</strong>：将层与层之间的离散关系，变为<strong>连续关系</strong>。</p>
+</li>
+<li><p>由此可推出神经ODE的<strong>前向传播</strong>过程：</p>
+<ul>
+<li><p>通过一个连续的转换函数（神经网络）对t时刻的输入进行<strong>非线性变换</strong>，从而得到$f(h(t),t,\theta)$。随后ODE求解器对$f(h(t),t,\theta)$进行积分，得到$h(t_1)$：</p>
+<script type="math/tex; mode=display">
+h(t_1)=h(t_0)+\int^{t_1}_{t_0}{f(h(t),t,\theta))dt}</script><p>对比残差网络的计算，可以说残差网络是神经ODE的<strong>离散</strong>形式。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>反向传播</strong>过程：</p>
+<ul>
+<li>为了更新参数$\theta$，使用了<strong>adjoint sensitivity method</strong>来计算梯度，无需保存大量的中间结果。</li>
+<li>设损失函数为$L$，隐层状态为$z$，定义$a(t)=\frac{\partial L}{\partial z(t)}$。</li>
+<li>由链式法则，得：<script type="math/tex; mode=display">
+  \frac{da(t)}{dt}=-a(t)^T\frac{\partial f(z(t),t,\theta)}{\partial z(t)}</script></li>
+<li><p>这也是一个<strong>常微分方程</strong>。利用<strong>第二个ODE求解器</strong>，可以从后往前求出每个时刻的$a(t)$。继而计算损失函数对$\theta$的梯度：</p>
+<script type="math/tex; mode=display">
+  \frac{dL}{d\theta}=-\int^{t_0}_{t_1}a(t)^T\frac{\partial f(z(t),t,\theta)}{\partial \theta}dt</script><p>  利用梯度，可更新$\theta$。</p>
+</li>
+<li>需要注意的是，利用常微分方程求$a(t)$时，需要对应时刻的$z(t)$。而神经ODE为节约内存，<strong>前向传播没有保留中间结果</strong>，所以需要重新计算$z(t)$。这也可以用求$a(t)$的<strong>ODE求解器</strong>来求解。</li>
+<li>算法如下：<div style="width:80%;margin:auto">
+<img src="/2021/04/25/neural-ODE/Backward-propagation.PNG" class title="Backward propagation">
+</div>
+
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="2-优势"><a href="#2-优势" class="headerlink" title="2. 优势"></a>2. 优势</h1><ul>
+<li>内存优化<ul>
+<li>传统的反向传播需要利用前向传播计算得到的激活值计算梯度，这样会占用大量内存，且误差会累积，这是深度学习模型的瓶颈之一。本文给出的<strong>adjoint sensitivity method</strong>来计算梯度，使用的内存仅仅是常数级别的，不用保存大量的中间结果。</li>
+</ul>
+</li>
+<li>自适应计算<ul>
+<li>现在已有很成熟的ODE求解器，可以确保神经ODE<strong>在误差容忍度之内逼近常微分方程的真实解</strong>。调整误差容忍度，即在模型准确度与计算成本之间做权衡。</li>
+</ul>
+</li>
+<li><p>可缩放且可逆的规范化流</p>
+<pre><code>  - 注：这点暂时没能看懂
+</code></pre></li>
+<li>连续时间模型<ul>
+<li>由于神经ODE的层级是连续的而不是离散的，它可以计算任一时刻的值，可以直接处理<strong>不规则采样时间序列</strong>，而无需像多数模型一样对不规则间隔进行离散化。后者会损失不规则间隔蕴含的信息。</li>
+</ul>
+</li>
+</ul>
+<h1 id="3-局限性"><a href="#3-局限性" class="headerlink" title="3. 局限性"></a>3. 局限性</h1><p>本文认为神经ODE有一些局限性。</p>
+<ul>
+<li><strong>小批量学习可能更加复杂</strong>。因为需要求解多个ODE的误差。</li>
+<li><strong>需保证ODE有唯一解</strong>。根据Picard’s existence theorem，神经网络需具有有限的权值并且使用Lipshitz非线性（如Tanh和ReLU）。</li>
+<li><strong>ODE求解器误差容忍度的设置需要依靠经验</strong>。为了在模型准确度与计算成本之间做权衡，前向传播和后向传播过程都要设置误差容忍度。本文认为，对于sequence modeling，可以使用1.5e-8，对于分类问题和概率密度实验，可以使用1e-3和1e-5。</li>
+<li><strong>反向传播可能引入数值误差</strong>。因为反向传播时，由于重新从后往前计算$z(t)$，可能偏离原来前向传播计算的动态轨迹。可以引入一些检查点来解决。</li>
+</ul>
+<h1 id="4-处理不规则采样时间序列"><a href="#4-处理不规则采样时间序列" class="headerlink" title="4. 处理不规则采样时间序列"></a>4. 处理不规则采样时间序列</h1><p>在第二节中已经讲到了神经ODE在处理不规则采样时间序列的优越之处，本文建立了<strong>Latent ODE模型</strong>，用于为不规则采样时间序列建模。</p>
+<p>Latent ODE模型，相当于一个变分自编码器。标准RNN作为encoder，神经ODE作为decoder：</p>
+<div style="width:80%;margin:auto">
+<img src="/2021/04/25/neural-ODE/latent-ODE.PNG" class title="Latent ODE">
+</div>
+
+<pre><code>- 疑问：使用RNN作为encoder计算隐层状态时，本文似乎没有提及如何处理不规则间隔。
+</code></pre><h1 id="5-小结"><a href="#5-小结" class="headerlink" title="5. 小结"></a>5. 小结</h1><ul>
+<li>神经ODE模型将ODE应用于深度学习领域，将层与层之间的关系变得连续，使模型更具解释性。同时，减轻了内存负担，并由于ODE的特性，使我们可以调节误差容忍度来调节模型的精度和成本，而且也为不规则采样时间序列的处理提供了新的思路。</li>
+<li>计划跑一下作者提供的源代码，看一些相关文章对该模型的评价。</li>
+</ul>
+<h1 id="6-参考资料"><a href="#6-参考资料" class="headerlink" title="6. 参考资料"></a>6. 参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/news/375423">https://cloud.tencent.com/developer/news/375423</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.maplelearning.cn/index.php/2020/03/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%8Aneural-ordinary-differential-equations%E3%80%8B/">http://www.maplelearning.cn/index.php/2020/03/24/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0%E3%80%8Aneural-ordinary-differential-equations%E3%80%8B/</a></li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>论文阅读笔记：Neural Ordinary Differential Equations</p><p><a href="http://harry-zzh.github.io/2021/04/25/neural-ODE/">http://harry-zzh.github.io/2021/04/25/neural-ODE/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>harry-zzh</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-04-25</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-04-25</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i> <a class="link-muted" rel="tag" href="/tags/%E4%B8%8D%E8%A7%84%E5%88%99%E9%87%87%E6%A0%B7/">不规则采样, </a><a class="link-muted" rel="tag" href="/tags/%E6%97%B6%E9%97%B4%E5%BA%8F%E5%88%97/">时间序列, </a><a class="link-muted" rel="tag" href="/tags/srp%E5%91%A8%E6%8A%A5/">srp周报 </a></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/04/28/NA-ch1/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">数值分析：第1章 误差</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/04/20/PR-ch4/"><span class="level-item">模式识别导论：第4章 Neural Networks</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="harry-zzh"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">harry-zzh</p><p class="is-size-6 is-block">华南理工大学 计科</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>广东 广州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">31</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Harry-zzh" target="_blank" rel="noopener">Follow</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-结构"><span class="level-left"><span class="level-item">1. 结构</span></span></a></li><li><a class="level is-mobile" href="#2-优势"><span class="level-left"><span class="level-item">2. 优势</span></span></a></li><li><a class="level is-mobile" href="#3-局限性"><span class="level-left"><span class="level-item">3. 局限性</span></span></a></li><li><a class="level is-mobile" href="#4-处理不规则采样时间序列"><span class="level-left"><span class="level-item">4. 处理不规则采样时间序列</span></span></a></li><li><a class="level is-mobile" href="#5-小结"><span class="level-left"><span class="level-item">5. 小结</span></span></a></li><li><a class="level is-mobile" href="#6-参考资料"><span class="level-left"><span class="level-item">6. 参考资料</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a><p class="is-size-7"><span>&copy; 2021 harry-zzh</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

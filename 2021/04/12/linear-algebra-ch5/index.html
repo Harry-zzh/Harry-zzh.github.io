@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>线性代数：第5章 相似矩阵及二次型 - harry-zzh的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="harry-zzh的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="harry-zzh的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本章讨论"><meta property="og:type" content="blog"><meta property="og:title" content="线性代数：第5章 相似矩阵及二次型"><meta property="og:url" content="http://harry-zzh.github.io/2021/04/12/linear-algebra-ch5/"><meta property="og:site_name" content="harry-zzh的博客"><meta property="og:description" content="本章讨论"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://harry-zzh.github.io/img/og_image.png"><meta property="article:published_time" content="2021-04-12T12:42:15.000Z"><meta property="article:modified_time" content="2021-04-14T13:45:54.714Z"><meta property="article:author" content="harry-zzh"><meta property="article:tag" content="线性代数"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/img/og_image.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://harry-zzh.github.io/2021/04/12/linear-algebra-ch5/"},"headline":"线性代数：第5章 相似矩阵及二次型","image":["http://harry-zzh.github.io/img/og_image.png"],"datePublished":"2021-04-12T12:42:15.000Z","dateModified":"2021-04-14T13:45:54.714Z","author":{"@type":"Person","name":"harry-zzh"},"description":"本章讨论"}</script><link rel="canonical" href="http://harry-zzh.github.io/2021/04/12/linear-algebra-ch5/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal"><i class="fas fa-angle-double-right"></i>线性代数：第5章 相似矩阵及二次型</h1><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><i class="far fa-calendar-alt"> </i><time dateTime="${date_xml(page.date)}" title="${date_xml(page.date)}">2021-04-12</time></span><span class="level-item is-hidden-mobile"><i class="far fa-calendar-check"> </i><time dateTime="${date_xml(page.updated)}" title="${date_xml(page.updated)}">2021-04-14</time></span><span class="level-item"><a class="link-muted" href="/categories/%E6%95%B0%E5%AD%A6/">数学</a></span><span class="level-item">14 minutes read (About 2027 words)</span></div></div><div class="content"><p>本章讨论<br><span id="more"></span></p>
+<h2 id="1-向量的内积、长度及正交性"><a href="#1-向量的内积、长度及正交性" class="headerlink" title="1. 向量的内积、长度及正交性"></a>1. 向量的内积、长度及正交性</h2><ul>
+<li><strong>内积</strong>：记为$[x, y]=x^Ty$。结果是一个实数。有如下性质：<ul>
+<li>$[x, y] = [y, x]$</li>
+<li>$[\lambda x, y]= \lambda[x, y]$</li>
+<li>$[x + y, z]= [x, z] + [y, z]$</li>
+<li>当$x=0$时，$[x, x]=0$；当$x \neq 0$时，$[x, x] &gt; 0$</li>
+<li>施瓦茨不等式：$[x, y]^2 \leq [x, x] [y, y]$</li>
+</ul>
+</li>
+<li><strong>长度</strong>：$||x|| = \sqrt{[x, x]} = \sqrt{x_1^2+x_2^2+\cdots+x_n^2}$，长度也被称为<strong>范数</strong>。<ul>
+<li>当$||x||=1$时，称向量$x$为<strong>单位向量</strong>。<strong>注意，单位向量是长度为1的向量，不代表向量的每一项为1</strong>！</li>
+<li>若向量$a\neq 0$，则$\frac{a}{||a||}$是单位向量，这一过程称为把向量$a$<strong>单位化</strong>。</li>
+<li>夹角$\theta = arccos\frac{[x, y]}{||x|| ||y||}, x, y \neq 0$</li>
+</ul>
+</li>
+<li><strong>正交</strong>：当$[x, y]=0$时，称向量$x$与$y$正交。显然<strong>零向量和任何向量都正交</strong>。</li>
+<li>定理1：<strong>正交向量组</strong>，是指一组<strong>两两正交的非零向量</strong>。若有n维正交向量组，则这些向量<strong>线性无关</strong>。</li>
+<li><strong>标准正交基</strong>：若n维向量$e_1,e_2,\cdots,e_r$是向量空间$V$的一个基，若它们<strong>两两正交</strong>，且都是<strong>单位向量</strong>，则称它们是$V$的一个<strong>标准正交基</strong>。<ul>
+<li>$V$中的任一向量$a=\lambda_1e_1+\lambda_2e_2+\cdots+\lambda_re_r$。为求$a$的坐标，也就是$\lambda$，上式左乘$e_i^T$，则$e_i^Ta=\lambda_ie_i^Te_i=\lambda_i$。故$\lambda_i=e_i^Ta=[a, e_i]$。<strong>用这个公式可以很方便的求得向量坐标，故在给向量空间取积时常常取标准正交基</strong>。</li>
+</ul>
+</li>
+<li><p><strong>标准正交化</strong>：把向量空间的一个基，化为标准正交基的过程。常用<strong>施密特正交化</strong>，把$a_1,a_2,\cdots,a_r$标准正交化：</p>
+<p>  第一步：</p>
+<script type="math/tex; mode=display">
+  \begin{aligned}
+  b_1&=a_1,\\
+  b_2&=a_2-\frac{[b_1, a_2]}{[b_1, b_1]}b_1, \\
+  &\cdots\cdots\\
+  b_r&=a_r-\frac{[b_1, a_r]}{[b_1, b_1]}b_1-\frac{[b_2, a_r]}{[b_2, b_2]}b_2-\cdots-\frac{[b_{r-1}, a_r]}{[b_{r-1}, b_{r-1}]}b_{r-1}
+  \end{aligned}</script><p>  第二步，把它们单位化，得：</p>
+<script type="math/tex; mode=display">
+  e_1=\frac{1}{||b_1||}b_1, \cdots, e_r=\frac{1}{||b_r||}b_r</script><p>  例：<br>  已知$a_1=\left(\begin{matrix}<br>  1\\1\\1<br>  \end{matrix}\right)$，求一组非零向量$a_2,a_3$，使$a_1,a_2,a_3$两两正交。</p>
+<p>  解：$a_2,a_3$应是$a_1^Tx=0$的解（正交条件），即$x_1+x_2+x_3=0$。</p>
+<p>  则基础解系$\xi_1=\left(\begin{matrix}<br>  -1\\1\\0<br>  \end{matrix}\right), \xi_2=\left(\begin{matrix}<br>  -1\\0\\1<br>  \end{matrix}\right)$。</p>
+<p>  把基础解系进行<strong>施密特正交化</strong>，则得$a_1=\left(\begin{matrix}<br>  -1\\1\\0<br>  \end{matrix}\right), a_2=\left(\begin{matrix}<br>  -1\\{-1}\\2<br>  \end{matrix}\right)$（$a_2,a_3$已两两正交）</p>
+<p>  因为$a_2,a_3$是$\xi_1,\xi_2$的线性组合，则它们仍与$a_1$正交，所以$a_2,a_3$即为所求。（基础解系的线性组合，也是原方程的解）</p>
+</li>
+<li><strong>正交矩阵</strong>：如果n阶矩阵$A$满足$A^TA=E$，即$A^{-1}=A^T$，则称$A$为正交矩阵，也称<strong>正交阵</strong>。<strong>正交阵一定是方阵</strong>。<ul>
+<li>用$A$的列向量表示，则$a^T_ia_j=\begin{cases}<br>1, i=j\\0, i\neq j<br>\end{cases}$</li>
+<li>由上式，可知<strong>方阵$A$为正交矩阵的充要条件是$A$的列向量都是单位向量，且两两正交（可以和标准正交基的定义作类比）</strong>。</li>
+<li>因为$a^T_ia_j$是内积的表达式，当$i=j$，说明是两个相同向量作内积，且得到1，则该向量是<strong>单位向量</strong>；当$i\neq j$，说明是两个不同向量作内积，且得到0，说明这两个<strong>向量正交</strong>。故能够得到方阵$A$为正交矩阵的充要条件。</li>
+</ul>
+</li>
+<li><strong>正交矩阵的性质</strong>：<ul>
+<li>若$A$为正交矩阵，则$A^{-1}=A^T$也是正交矩阵，且$|A|=1$或$-1$。</li>
+<li>若$A,B$为正交矩阵，则$AB$也为正交矩阵。</li>
+</ul>
+</li>
+<li><strong>正交变换</strong>：若$P$为正交矩阵，则线性变换$y=Px$称为正交变换。且$||y||=\sqrt{y^Ty}=\sqrt{x^TP^TPx}=||x||$，变换后<strong>向量长度不变</strong>。</li>
+</ul>
+<h2 id="2-方阵的特征值与特征向量"><a href="#2-方阵的特征值与特征向量" class="headerlink" title="2. 方阵的特征值与特征向量"></a>2. 方阵的特征值与特征向量</h2><ul>
+<li><p>设$A$是n阶方阵，如果数$\lambda$和n维非零列向量$x$使</p>
+<script type="math/tex; mode=display">Ax = \lambda x</script><p>  成立，那么，数$\lambda$被称为矩阵$A$的<strong>特征值</strong>，非零向量$x$称为$A$对应于特征值$\lambda$的<strong>特征向量</strong>。</p>
+<p>  上式也可写成：</p>
+<script type="math/tex; mode=display">(A-\lambda E)x=0</script><p>  这是含有<strong>n个方程n个未知数的齐次线性方程组</strong>。它有非零解的充要条件是：</p>
+<script type="math/tex; mode=display">|A-\lambda E|=0</script><p>  （因为齐次线性方程组一定有零解，所以它要么有唯一解，要么有无数解，不可能无解。</p>
+<p>  根据第3章提到的【线性方程组的解】，只有在无数解这一情况下方程组才可能有非零解。所以，$R(A-\lambda E) &lt; n$，系数矩阵是奇异矩阵，行列式为0。）</p>
+<p>  $|A-\lambda E|=0$是以$\lambda$为未知数的一元n次方程，称为矩阵$A$的<strong>特征方程</strong>。左端是$\lambda$的<strong>n次多项式</strong>，记作$f(\lambda)$，称为矩阵$A$的<strong>特征多项式</strong>。所以，<strong>n阶方阵$A$在复数范围内有n个特征值</strong>，为$\lambda_1\sim\lambda_n$（包括重根）。</p>
+<p>  有两个<strong>重要性质</strong>：</p>
+<ul>
+<li>$\lambda_1+\lambda_2+\cdots+\lambda_n=a_{11}+a_{22}+\cdots+a_{nn}$</li>
+<li><p>$\lambda_1\lambda_2\cdots\lambda_n=|A|$</p>
+<p>$a_{ii}$是$A$对角线上的元素。</p>
+<p>由性质2可知，<strong>$A$是可逆矩阵的充要条件是它的n个特征值全不为零（因为可逆矩阵的充要条件是行列式不为0）</strong>。</p>
+<p>其他性质：</p>
+</li>
+<li>若$p_i$是矩阵$A$对应于特征值$\lambda_i$的特征向量，则$kp_i$（$k\neq 0$）也是对应于$\lambda_i$的特征向量。</li>
+<li>若$\lambda$是$A$的特征值，则$\lambda^k$是$A^k$的特征值。$\phi(\lambda)$是$\phi(A)$的特征值（其中，$\phi(\lambda)=a_0+a_1\lambda+\cdots+a_m\lambda^m$，$\phi(A)=a_0E+a_1A+\cdots+a_mA^m$）。</li>
+</ul>
+</li>
+<li><p>定理2：<strong>设$\lambda_1\sim\lambda_m$是方阵$A$的m个特征值，$p_1\sim p_m$依次是与之对应的特征向量，如果$\lambda_1\sim\lambda_m$各不相等，则$p_1\sim p_m$线性无关</strong>。</p>
+</li>
+</ul>
+<h2 id="3-相似矩阵"><a href="#3-相似矩阵" class="headerlink" title="3. 相似矩阵"></a>3. 相似矩阵</h2><ul>
+<li><p>设$A, B$都是n阶方阵，若有可逆矩阵$P$，使：</p>
+<script type="math/tex; mode=display">P^{-1}AP=B</script><p>  则称$B$是$A$的<strong>相似矩阵</strong>，运算$P^{-1}AP$称为对$A$进行<strong>相似变换</strong>。可逆矩阵$P$称为把$A$变成$B$的<strong>相似变换矩阵</strong>。</p>
+</li>
+<li><p>定理3：<strong>若n阶矩阵$A$与$B$相似，则$A$与$B$的特征多项式相同，从而$A$与$B$的特征值也相同</strong>。</p>
+<ul>
+<li><p>推论：<strong>若n阶矩阵$A$与对角矩阵</strong></p>
+<script type="math/tex; mode=display">
+  \Lambda=\left(\begin{matrix}
+  \lambda_1 & & & \\
+  &\lambda_2 & & \\
+  & &\ddots & \\
+  & & &\lambda_n
+  \end{matrix}\right)</script><p>  <strong>相似，则$\lambda_1\sim\lambda_n$是$A$的n个特征值</strong>。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>把矩阵$A$对角化</strong>：指寻找相似变换矩阵$P$的过程，使$P^{-1}AP=\Lambda$，$\Lambda$是对角矩阵。</p>
+<p>  由$P^{-1}AP=\Lambda$，得$AP=P\Lambda$，即$A(p_1,p_2,\cdots,p_n)=(p_1,p_2,\cdots,p_n)\left(\begin{matrix}</p>
+<pre><code>  \lambda_1 &amp; &amp; &amp; \\
+  &amp;\lambda_2 &amp; &amp; \\
+  &amp; &amp;\ddots &amp; \\
+  &amp; &amp; &amp;\lambda_n
+  \end&#123;matrix&#125;\right)$
+</code></pre><p>  于是有$Ap_i=\lambda_ip_i$</p>
+<p>  $\lambda_i$是$A$的特征值，$p_i$是相似变换矩阵$P$的列向量。那么，<strong>相似变换矩阵$P$可以由$A$的n个特征向量构成</strong>（注：$P$不唯一），但是要满足$P$<strong>是可逆矩阵</strong>这一条件。</p>
+</li>
+<li>定理4：<strong>n阶矩阵$A$能对角化的充要条件是$A$有n个线性无关的特征向量</strong>。<ul>
+<li>因为$A$的n个特征向量可构成相似变换矩阵$P$，而$P$是可逆的，故$P$的每个列向量都线性无关（这是可逆矩阵的性质）。因此，$A$的n个特征向量也必须线性无关。</li>
+<li>推论：<strong>如果n阶矩阵$A$的n个特征值互不相等，则$A$与对角矩阵相似</strong>。（由定理2可得）</li>
+</ul>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>线性代数：第5章 相似矩阵及二次型</p><p><a href="http://harry-zzh.github.io/2021/04/12/linear-algebra-ch5/">http://harry-zzh.github.io/2021/04/12/linear-algebra-ch5/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>harry-zzh</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-04-12</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-04-14</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i> <a class="link-muted" rel="tag" href="/tags/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/">线性代数 </a></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/04/14/survey-ISTS/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">论文阅读笔记：不规则采样时间序列的方法归纳</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/04/11/ds-link/"><span class="level-item">数据结构：链表、栈、队列</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="harry-zzh"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">harry-zzh</p><p class="is-size-6 is-block">华南理工大学 计科</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>广东 广州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">31</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Harry-zzh" target="_blank" rel="noopener">Follow</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-向量的内积、长度及正交性"><span class="level-left"><span class="level-item">1. 向量的内积、长度及正交性</span></span></a></li><li><a class="level is-mobile" href="#2-方阵的特征值与特征向量"><span class="level-left"><span class="level-item">2. 方阵的特征值与特征向量</span></span></a></li><li><a class="level is-mobile" href="#3-相似矩阵"><span class="level-left"><span class="level-item">3. 相似矩阵</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a><p class="is-size-7"><span>&copy; 2021 harry-zzh</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>模式识别导论：第2章 Bayesian Decision Theory - harry-zzh的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="harry-zzh的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="harry-zzh的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="本章介绍贝叶斯决策理论，介绍贝叶斯公式、决策理论、误差分析、损失函数、最小化风险规则。"><meta property="og:type" content="blog"><meta property="og:title" content="模式识别导论：第2章 Bayesian Decision Theory"><meta property="og:url" content="http://harry-zzh.github.io/2021/04/17/PR-ch2/"><meta property="og:site_name" content="harry-zzh的博客"><meta property="og:description" content="本章介绍贝叶斯决策理论，介绍贝叶斯公式、决策理论、误差分析、损失函数、最小化风险规则。"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/17/PR-ch2/Bayes-Error-Rate.JPG"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/17/PR-ch2/reducible-error.JPG"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/17/PR-ch2/Example-1.PNG"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/17/PR-ch2/Example-2.PNG"><meta property="og:image" content="http://harry-zzh.github.io/2021/04/17/PR-ch2/Example-3.PNG"><meta property="article:published_time" content="2021-04-17T09:29:58.000Z"><meta property="article:modified_time" content="2021-04-19T12:14:24.316Z"><meta property="article:author" content="harry-zzh"><meta property="article:tag" content="模式识别"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/2021/04/17/PR-ch2/Bayes-Error-Rate.JPG"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://harry-zzh.github.io/2021/04/17/PR-ch2/"},"headline":"模式识别导论：第2章 Bayesian Decision Theory","image":[],"datePublished":"2021-04-17T09:29:58.000Z","dateModified":"2021-04-19T12:14:24.316Z","author":{"@type":"Person","name":"harry-zzh"},"description":"本章介绍贝叶斯决策理论，介绍贝叶斯公式、决策理论、误差分析、损失函数、最小化风险规则。"}</script><link rel="canonical" href="http://harry-zzh.github.io/2021/04/17/PR-ch2/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal"><i class="fas fa-angle-double-right"></i>模式识别导论：第2章 Bayesian Decision Theory</h1><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><i class="far fa-calendar-alt"> </i><time dateTime="${date_xml(page.date)}" title="${date_xml(page.date)}">2021-04-17</time></span><span class="level-item is-hidden-mobile"><i class="far fa-calendar-check"> </i><time dateTime="${date_xml(page.updated)}" title="${date_xml(page.updated)}">2021-04-19</time></span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%A1%E7%A7%91/">计科</a></span><span class="level-item">11 minutes read (About 1709 words)</span></div></div><div class="content"><p>本章介绍贝叶斯决策理论，介绍贝叶斯公式、决策理论、误差分析、损失函数、最小化风险规则。<br><span id="more"></span></p>
+<h2 id="1-Bayes-Rule"><a href="#1-Bayes-Rule" class="headerlink" title="1. Bayes Rule"></a>1. Bayes Rule</h2><ul>
+<li><p><strong>贝叶斯公式（Bayes Formula）</strong>：</p>
+<script type="math/tex; mode=display">
+  p(w|x)=\frac{p(x|w)p(w)}{p(x)}</script><ul>
+<li>$p(w|x)$是后验概率（posterior），指某证据下现象发生的概率。</li>
+<li>$p(x|w)$是似然（likelihood），指某现象下该证据发生的概率。</li>
+<li>$p(w)$是先验概率（prior），指依据过往经验得到现象发生的概率。</li>
+<li>$p(x)$是证据（evidence），指依据过往经验得到证据发生的概率。</li>
+</ul>
+</li>
+<li><strong>贝叶斯决策法则（Bayes Decision Rule）</strong>：<ul>
+<li>比较现象的后验概率，后验概率大的现象则为当前现象。贝叶斯公式等号右边的部分，分母是一样的，所以比较分子即可。</li>
+</ul>
+</li>
+<li><strong>最大似然法则（Maximum Likelihood (ML) Rule）</strong>：<ul>
+<li>若$p(w)$是一样的，比较似然$p(x|w)$即可。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-Bayes-Error"><a href="#2-Bayes-Error" class="headerlink" title="2. Bayes Error"></a>2. Bayes Error</h2><ul>
+<li>多分类问题的错误率（Probability of error）<script type="math/tex; mode=display">
+  p(error|x)=1-max(p(w_1|x),p(w_2|x),\cdots,p(w_c|x))</script><ul>
+<li>错误率是错误分类的概率。个人认为这里假设了不同分类的分布是相互独立的。根据Bayes Rule，贝叶斯分类器做分类时会将后验概率最大的分类作为分类结果，但分类结果有可能是错误的，即其他情况的概率就是分错的概率，也就是【<strong>1 - 该分类结果的概率</strong>】。</li>
+</ul>
+</li>
+<li><strong>贝叶斯误差（Bayes Error Rate）</strong><ul>
+<li>贝叶斯分类器选某一类作为分类结果时，有最低的错误率，则该错误率被称为贝叶斯误差。不同分类的分布并不是相互独立的。</li>
+<li>错误率的测定：<script type="math/tex; mode=display">
+  p(error)=\sum^{M}_ {i=1}\int_{R_i}{(\sum_{j\neq i}^{M}p(x|w_j)p(w_j))dx}</script><ul>
+<li>M是分类总数；$R_i$是分类i的后验概率最大时，x的范围。$R_i$由decision boundary（决策边界）划分。</li>
+<li>计算的是贝叶斯分类器将i类作为结果时，真实结果是其他类的概率，也就是错误率。</li>
+</ul>
+</li>
+<li>二分类的例子：<script type="math/tex; mode=display">
+  p(error)=\int_{R_1}p(x|w_2)p(w_2)dx+\int_{R_2}p(x|w_1)p(w_1)dx</script><ul>
+<li>当决策边界选在$x_b$时，此时的错误率最小，即为<strong>贝叶斯误差</strong>：<div style="width:40%;margin:auto"><img src="/2021/04/17/PR-ch2/Bayes-Error-Rate.JPG" class title="bayes error rate"></div></li>
+<li>当决策边界不在$x_b$时，此时的错误率不是最小，多了<strong>reducible-error（可减少误差）</strong>。可减少误差表示误差是可以通过优化方法减少的，比如在这里就是选择$x_b$作为决策边界：<div style="width:40%;margin:auto"><img src="/2021/04/17/PR-ch2/reducible-error.JPG" class title="reducible error"></div>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-Loss-Function"><a href="#3-Loss-Function" class="headerlink" title="3. Loss Function"></a>3. Loss Function</h2><ul>
+<li><strong>条件风险（Conditional risk）</strong>：<script type="math/tex; mode=display">
+  R(a_i|x)=\sum^c_{j=1}\lambda_{ij}P(w_j|x)</script><ul>
+<li>即做出决策$a_i$的风险，决策$a_i$就是将$w_i$作为分类结果。$\lambda_{ij}$是真实分类为$w_j$时，做出决策$a_i$的损失。</li>
+<li>若做出某决策$a_i$时，有最小风险$R(a_i|x)$。则该风险为<strong>Bayes Risk（贝叶斯风险）</strong>。</li>
+</ul>
+</li>
+<li><strong>最小风险决策规则（Minimum Risk Decision Rule）</strong>：<ul>
+<li>选择有最小风险$R(a_i|x)$时做出的决策$a_i$。</li>
+<li>根据条件风险公式计算并比较。</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-Discriminant-Function"><a href="#4-Discriminant-Function" class="headerlink" title="4. Discriminant Function"></a>4. Discriminant Function</h2><ul>
+<li>若做出正确决策$a_i$，则$\lambda_{ii}=0$，所以上述条件风险公式可简化为$R(a_i|x)=1 - P(w_i|x)$，$R(a_i|x)$越小越好，所以要选出$w_i$，使$P(w_i|x)$最大。这是<strong>Minimum-Error-Rate</strong>的想法。</li>
+<li><strong>判别函数（discriminant functions）</strong>：$g_i(x),i=1,2,\cdots,c$<ul>
+<li>从<strong>Minimum-Error-Rate</strong>的角度出发，则令$g_i(x)=P(w_i|x)$。</li>
+<li>当$g_i(x) &gt; g_j(x)$，则将x分类到$w_i$。</li>
+<li>如果是二分类问题，常用以下两种形式的判别函数。当$g(x)&gt;0$，选择$w_1$，否则$w_2$：<ul>
+<li>$g(x)=p(w_1|x)-p(w_2|x)$</li>
+<li>$g(x)=ln\frac{p(x|w_1)p(w_1)}{p(x|w_2)p(w_2)}$</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-Normal-Distribution"><a href="#5-Normal-Distribution" class="headerlink" title="5. Normal Distribution"></a>5. Normal Distribution</h2><ul>
+<li>正态分布公式：<ul>
+<li>标准情形：<script type="math/tex; mode=display">
+  p(x)=\frac{1}{\sqrt{2\pi}\delta}e^{-\frac{1}{2}(\frac{x-\mu}{\delta})^2}</script></li>
+<li>拓展到多维度：<script type="math/tex; mode=display">
+  p(x)=\frac{1}{(2\pi)^{d/2}|\Sigma|^{1/2}}e^{-\frac{1}{2}(x-\mu)^T\Sigma^{-1}(x-\mu)}</script><ul>
+<li>$\Sigma$是协方差矩阵。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>多元正态分布的判别函数</strong><ul>
+<li>由上一小节可知，判别函数可写作：$g_i(x)=ln(p(x|w_i))+ln(p(w_i))$</li>
+<li>将多维度的正态分布公式代入，可得：$g_i(x)=-\frac{1}{2}(x-\mu_i)^T\Sigma^{-1}_i(x-\mu_i)-\frac{d}{2}ln(2\pi)-\frac{1}{2}ln|\Sigma_i|+ln(p(w_i))$，<strong>假设</strong>$p(x|w_i)\sim N(\mu_i,\Sigma_i)$</li>
+<li><strong>假设每种分类的样本的协方差相同</strong>，即$\Sigma_i=\Sigma$，则将上式的$g_i(x)$化简得到：<script type="math/tex; mode=display">
+  \begin{aligned}
+  g_i(x)&=\Sigma^{-1}\mu_i x - \frac{1}{2}\mu_i^T\Sigma^{-1}\mu_i+ln(p(w_i)) \\
+  &=w_ix+w_{i0}
+  \end{aligned}</script><ul>
+<li>发现是个<strong>线性判别函数</strong>。</li>
+</ul>
+</li>
+<li><strong>更一般地，每种分类的样本的协方差不一定相同</strong>，则将$g_i(x)$化简得到：<script type="math/tex; mode=display">
+  \begin{aligned}
+  g_i(x)&=x^T(-\frac{1}{2}\Sigma^{-1}_i)x +\Sigma^{-1}_i\mu_i x - \frac{1}{2}\mu_i^T\Sigma^{-1}_i\mu_i-\frac{1}{2}ln|\Sigma_i|+ln(p(w_i)) \\
+  &=x^TW_ix+w_ix+w_{i0}
+  \end{aligned}</script><ul>
+<li>对比上式，多了一些项，这是因为在协方差相同时才能将多出的这些项移除。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="6-Maximum-Likelihood"><a href="#6-Maximum-Likelihood" class="headerlink" title="6. Maximum Likelihood"></a>6. Maximum Likelihood</h2><ul>
+<li>上一节假设了$p(x|w_i)$服从高斯分布，所以需要估计参数$\mu_i$和$\Sigma_i$。</li>
+<li>ML的优势：简单，且样本数量增加时可以收敛。</li>
+<li>假设每个样本属于集合$D$，且<strong>独立同分布</strong>，令$\theta=(\mu,\Sigma)$，则$p(D|\theta)=\prod_{i=1}^np(x_i|\theta)$<ul>
+<li>$p(D|\theta)$是$\theta$关于样本的似然。</li>
+<li><strong>ML参数估计（ML Parameter Estimation）</strong>，即找到使上式最大的$\theta$。</li>
+<li>若上式达到最大值，根据贝叶斯决策理论，误差最小。</li>
+<li>可以将上式化为<strong>对数似然（log likelihood）</strong>，求导数为0时的$\hat{\theta}$：<ul>
+<li>$\hat{\mu}=\frac{1}{n}\sum_{k=1}^nx_k$</li>
+<li>$\hat{\sigma}^2=\frac{1}{n}\sum_{k=1}^n(x_k-\hat{\mu})^2$</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>利用ML训练分类器：<ul>
+<li><strong>第一步：利用ML，计算每个分类下参数的值。</strong></li>
+<li><strong>第二步：利用多元正态分布的判别函数和计算得到的参数值，对每个分类计算判别函数，得到决策边界。</strong></li>
+<li>例子：<br>  <div style="width:60%;margin:auto"><img src="/2021/04/17/PR-ch2/Example-1.PNG" class title="Example-1"></div><br>  <div style="width:60%;margin:auto"><img src="/2021/04/17/PR-ch2/Example-2.PNG" class title="Example-2"></div><br>  <div style="width:60%;margin:auto"><img src="/2021/04/17/PR-ch2/Example-3.PNG" class title="Example-3"></div><ul>
+<li>注意，图3判别函数的形式可能会引起误会。但其实就是个式子，不是矩阵。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div><div class="article-licensing box"><div class="licensing-title"><p>模式识别导论：第2章 Bayesian Decision Theory</p><p><a href="http://harry-zzh.github.io/2021/04/17/PR-ch2/">http://harry-zzh.github.io/2021/04/17/PR-ch2/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>harry-zzh</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-04-17</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-04-19</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i> <a class="link-muted" rel="tag" href="/tags/%E6%A8%A1%E5%BC%8F%E8%AF%86%E5%88%AB/">模式识别 </a></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/04/19/PR-ch3/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">模式识别导论：第3章 Linear Classification Models</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/04/17/PR-ch1/"><span class="level-item">模式识别导论：第1章 基本介绍</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="harry-zzh"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">harry-zzh</p><p class="is-size-6 is-block">华南理工大学 计科</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>广东 广州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">31</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Harry-zzh" target="_blank" rel="noopener">Follow</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-Bayes-Rule"><span class="level-left"><span class="level-item">1. Bayes Rule</span></span></a></li><li><a class="level is-mobile" href="#2-Bayes-Error"><span class="level-left"><span class="level-item">2. Bayes Error</span></span></a></li><li><a class="level is-mobile" href="#3-Loss-Function"><span class="level-left"><span class="level-item">3. Loss Function</span></span></a></li><li><a class="level is-mobile" href="#4-Discriminant-Function"><span class="level-left"><span class="level-item">4. Discriminant Function</span></span></a></li><li><a class="level is-mobile" href="#5-Normal-Distribution"><span class="level-left"><span class="level-item">5. Normal Distribution</span></span></a></li><li><a class="level is-mobile" href="#6-Maximum-Likelihood"><span class="level-left"><span class="level-item">6. Maximum Likelihood</span></span></a></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a><p class="is-size-7"><span>&copy; 2021 harry-zzh</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>

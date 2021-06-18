@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta><title>数值分析：第5章 解线性代数方程组的直接法 - harry-zzh的博客</title><link rel="manifest" href="/manifest.json"><meta name="application-name" content="harry-zzh的博客"><meta name="msapplication-TileImage" content="/img/favicon.svg"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="harry-zzh的博客"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="description" content="直接法是经过有限步计算后求得方程组准确解的方法，本章研究的对象是n阶线性代数方程组。"><meta property="og:type" content="blog"><meta property="og:title" content="数值分析：第5章 解线性代数方程组的直接法"><meta property="og:url" content="http://harry-zzh.github.io/2021/05/09/NA-ch5/"><meta property="og:site_name" content="harry-zzh的博客"><meta property="og:description" content="直接法是经过有限步计算后求得方程组准确解的方法，本章研究的对象是n阶线性代数方程组。"><meta property="og:locale" content="en_US"><meta property="og:image" content="http://harry-zzh.github.io/2021/05/09/NA-ch5/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%96%B9%E7%A8%8B%E7%BB%84.png"><meta property="article:published_time" content="2021-05-09T07:20:06.000Z"><meta property="article:modified_time" content="2021-05-13T01:19:49.810Z"><meta property="article:author" content="harry-zzh"><meta property="article:tag" content="数值分析"><meta property="twitter:card" content="summary"><meta property="twitter:image" content="/2021/05/09/NA-ch5/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%96%B9%E7%A8%8B%E7%BB%84.png"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://harry-zzh.github.io/2021/05/09/NA-ch5/"},"headline":"数值分析：第5章 解线性代数方程组的直接法","image":["http://harry-zzh.github.io/2021/05/09/NA-ch5/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%96%B9%E7%A8%8B%E7%BB%84.png"],"datePublished":"2021-05-09T07:20:06.000Z","dateModified":"2021-05-13T01:19:49.810Z","author":{"@type":"Person","name":"harry-zzh"},"description":"直接法是经过有限步计算后求得方程组准确解的方法，本章研究的对象是n阶线性代数方程组。"}</script><link rel="canonical" href="http://harry-zzh.github.io/2021/05/09/NA-ch5/"><link rel="icon" href="/img/favicon.svg"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;600&amp;family=Source+Code+Pro"><link rel="stylesheet" href="/css/default.css"><style>body>.footer,body>.navbar,body>.section{opacity:0}</style><!--!--><!--!--><!--!--><!--!--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css"><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script><!--!--><!--!--><meta name="generator" content="Hexo 5.4.0"></head><body class="is-3-column"><nav class="navbar navbar-main"><div class="container"><div class="navbar-brand justify-content-center"><a class="navbar-item navbar-logo" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a></div><div class="navbar-menu"><div class="navbar-start"><a class="navbar-item" href="/">主页</a><a class="navbar-item" href="/archives">归档</a><a class="navbar-item" href="/categories">分类</a><a class="navbar-item" href="/tags">标签</a></div><div class="navbar-end"><a class="navbar-item" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a><a class="navbar-item is-hidden-tablet catalogue" title="Catalogue" href="javascript:;"><i class="fas fa-list-ul"></i></a><a class="navbar-item search" title="Search" href="javascript:;"><i class="fas fa-search"></i></a></div></div></div></nav><section class="section"><div class="container"><div class="columns"><div class="column order-2 column-main is-8-tablet is-8-desktop is-9-widescreen"><div class="card"><article class="card-content article" role="article"><h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal"><i class="fas fa-angle-double-right"></i>数值分析：第5章 解线性代数方程组的直接法</h1><div class="article-meta is-size-7 is-uppercase level is-mobile"><div class="level-left"><span class="level-item"><i class="far fa-calendar-alt"> </i><time dateTime="${date_xml(page.date)}" title="${date_xml(page.date)}">2021-05-09</time></span><span class="level-item is-hidden-mobile"><i class="far fa-calendar-check"> </i><time dateTime="${date_xml(page.updated)}" title="${date_xml(page.updated)}">2021-05-13</time></span><span class="level-item"><a class="link-muted" href="/categories/%E8%AE%A1%E7%A7%91/">计科</a></span><span class="level-item">9 minutes read (About 1337 words)</span></div></div><div class="content"><p>直接法是经过有限步计算后求得方程组准确解的方法，本章研究的对象是n阶线性代数方程组。<br><span id="more"></span></p>
+<h1 id="1-高斯消去法"><a href="#1-高斯消去法" class="headerlink" title="1. 高斯消去法"></a>1. 高斯消去法</h1><h1 id="1-1-顺序高斯消去法"><a href="#1-1-顺序高斯消去法" class="headerlink" title="1.1 顺序高斯消去法"></a>1.1 顺序高斯消去法</h1><ul>
+<li><p>通过初等变换，将方程组$Ax=b$，转换为一个等价的三角形方程组：</p>
+  <div style="width:60%;margin:auto">
+  <img src="/2021/05/09/NA-ch5/%E4%B8%89%E8%A7%92%E5%BD%A2%E6%96%B9%E7%A8%8B%E7%BB%84.png" class title="三角形方程组">
+  </div>
+
+<p>  这个过程被称为<strong>消元</strong>。逐个求出$x_n,x_{n-1},\cdots,x_1$，这个过程被称为<strong>回代</strong>。</p>
+</li>
+<li>顺序高斯消去法求解算法：先消元后回代。</li>
+</ul>
+<h1 id="1-2-列主元高斯消去法"><a href="#1-2-列主元高斯消去法" class="headerlink" title="1.2 列主元高斯消去法"></a>1.2 列主元高斯消去法</h1><ul>
+<li>在顺序高斯消去法的消元过程中，若出现$a_{kk}^{(k)}=0$，则消元无法进行。接近0，也会使舍入误差扩散。因此提出了主元高斯消去法。</li>
+<li>列主元高斯消去法求解算法：<ul>
+<li>每次消元前在当前列中的当前行之下选择一个<strong>绝对值最大</strong>的数作为主元。通过行变换将主元所在行和当前行交换。</li>
+</ul>
+</li>
+</ul>
+<h1 id="1-3-全主元高斯消去法"><a href="#1-3-全主元高斯消去法" class="headerlink" title="1.3 全主元高斯消去法"></a>1.3 全主元高斯消去法</h1><ul>
+<li>与列主元高斯消去法类似，只不过选取主元的范围是<strong>整个系数矩阵</strong>。既有行变换，也有列变换。可以将舍入误差控制在最小的范围，但是花费时间多。</li>
+</ul>
+<h1 id="2-LU分解法"><a href="#2-LU分解法" class="headerlink" title="2. LU分解法"></a>2. LU分解法</h1><ul>
+<li><p>由顺序高斯消去法可以看到，只要方程$AX=b$的系数矩阵$A$的所有顺序主子式不为零，<strong>则$A$一定可以分解成$A=LU$</strong>。其中，</p>
+<script type="math/tex; mode=display">
+  L=\left[ 
+  \begin{matrix} 
+  1 & & &\\
+  l_{21} &1 && \\
+  \vdots & \vdots &\ddots & \\
+  l_{n1} &l_{n2} &\cdots &1
+  \end{matrix}
+  \right],U=   
+  \left[
+  \begin{matrix} 
+  u_{11} &u_{12} &\cdots &u_{1n} \\
+   &u_{22} &\cdots &u_{2n} \\
+   &  & \ddots&\vdots \\
+  & & &u_{nn} 
+  \end{matrix}
+  \right]</script></li>
+<li>定理1：如果系数矩阵$A$的所有顺序主子式不为零，则$A$有<strong>惟一</strong>的$LU$分解。</li>
+</ul>
+<h2 id="2-1-直接LU分解法"><a href="#2-1-直接LU分解法" class="headerlink" title="2.1 直接LU分解法"></a>2.1 直接LU分解法</h2><p>线性方程组$AX=b$。</p>
+<ul>
+<li>求解$LU=A$，得到$L,U$。<ul>
+<li><strong>先求$U$的第 i 行，再求$L$的第 i 列</strong>。可以说，$U$的第 i 行是由$L$的第 i 行辅助求得的，$L$的第 i 列是由$U$的第 i 列辅助求得的。</li>
+<li>$U$的第一行就是$A$的第一行。</li>
+</ul>
+</li>
+<li>求解$LY=b$，得到$Y$。</li>
+<li>求解$Y=UX$，得到$X$。</li>
+</ul>
+<h2 id="2-2-列主元LU分解法"><a href="#2-2-列主元LU分解法" class="headerlink" title="2.2 列主元LU分解法"></a>2.2 列主元LU分解法</h2><ul>
+<li>直接进行LU分解时，$u_{kk}$可能为0，或绝对值接近0，引起舍入误差的积累。</li>
+</ul>
+<h1 id="3-对称正定矩阵的平方根法和分解法"><a href="#3-对称正定矩阵的平方根法和分解法" class="headerlink" title="3. 对称正定矩阵的平方根法和分解法"></a>3. 对称正定矩阵的平方根法和分解法</h1><ul>
+<li>定理2：设$A$是<strong>对称正定矩阵</strong>，则$A$有如下<strong>分解</strong>：$A=LDL^T$。其中，$L$是单位下三角阵，$D$为对角阵，且这种分解是唯一的。<ul>
+<li>用$L$有唯一的$LU$分解可证明。</li>
+</ul>
+</li>
+<li>定理3：n阶对称正定矩阵$A$一定有<strong>Cholesky分解</strong>$A=L_1L_1^T$，当限定$L_1$的<strong>对角线为正</strong>时，矩阵的Cholesky分解唯一。</li>
+<li>定理提到的两种分解，都可以用来解方程组。分为<strong>平方根法（$A=L_1L_1^T$）和$LDL^T$分解法</strong>。</li>
+<li><strong>平方根法</strong>：<ul>
+<li>求解$LL^T=A$，得到$L$。</li>
+<li>求解$LY=b$，得到$Y$。</li>
+<li>求解$L^TX=Y$，得到$X$。</li>
+</ul>
+</li>
+<li><strong>$LDL^T$分解法</strong>（避免平方根法的开方运算）<ul>
+<li>求解$LDL^T=A$，得到$L,D$。</li>
+<li>求解$LY=b$，得到$Y$。</li>
+<li>求解$DZ=Y$，得到$Z$。</li>
+<li>求解$L^TX=Z$，得到$X$。  </li>
+</ul>
+</li>
+</ul>
+<h1 id="4-向量与矩阵范数"><a href="#4-向量与矩阵范数" class="headerlink" title="4. 向量与矩阵范数"></a>4. 向量与矩阵范数</h1><h2 id="4-1-向量范数"><a href="#4-1-向量范数" class="headerlink" title="4.1 向量范数"></a>4.1 向量范数</h2><ul>
+<li>是n维欧几里得空间中<strong>长度概念</strong>的推广，向量$X$的范数记为$||X||$。</li>
+<li>满足三个条件：<ul>
+<li>非负性</li>
+<li>齐次性：$||\alpha X||\leq |\alpha|\cdot||X||$</li>
+<li>三角不等式：$||X+Y||\leq ||X||+||Y||$，$X,Y$均为向量。</li>
+</ul>
+</li>
+<li>常用范数：<ul>
+<li>1范数：$\sum_{i=1}^n|x_i|$</li>
+<li>2范数：$(\sum_{i=1}^n|x_i|^2)^{1/2}$</li>
+<li>∞范数：$max_{1\leq i \leq n}|x_i|$</li>
+<li>更一般的p范数：$(\sum_{i=1}^n|x_i|^p)^{1/p}$</li>
+</ul>
+</li>
+<li><strong>范数等价</strong>：若存在与$X$无关的两个正常数$C_1,C_2$，使$C_1||X||_\alpha\leq ||X|| _\beta \leq C_2||X||_\alpha$，则这两个范数等价。<ul>
+<li><strong>有限维空间上任何两个范数都等价。</strong></li>
+</ul>
+</li>
+</ul>
+<h2 id="4-2-矩阵范数"><a href="#4-2-矩阵范数" class="headerlink" title="4.2 矩阵范数"></a>4.2 矩阵范数</h2><ul>
+<li>矩阵$A$的范数记为$||A||$。</li>
+<li>满足四个条件：<ul>
+<li>非负性</li>
+<li>齐次性</li>
+<li>三角不等式</li>
+<li>乘法不等式：$||AB||\leq ||A|| \cdot ||B||$。$A,B$都是n阶方阵。</li>
+</ul>
+</li>
+<li><strong>矩阵范数与向量范数相容</strong>：$||AX||\leq ||A|| \cdot ||X||$</li>
+<li>诱导矩阵范数：$||A||=max_{||X||= 1}||AX||$</li>
+<li><strong>常用范数</strong>：<ul>
+<li>1范数（列范数）：$||A||_ 1 = max_{1\leq j\leq n}\sum_{i=1}^n|a_{ij}|$</li>
+<li>2范数：$||A||_ 2=(\lambda_{max}(A^HA))^{1/2}$</li>
+<li>∞范数（行范数）：$||A||_ \infty =max_{1\leq i\leq n}\sum_{j=1}^n|a_{ij}|$</li>
+<li>F范数：2范数的推广，$||A||_F=(\sum _{i,j=1}^n|a _{ij}|^2)^{1/2}$</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-3-谱半径"><a href="#4-3-谱半径" class="headerlink" title="4.3 谱半径"></a>4.3 谱半径</h2><ul>
+<li>$A$的谱半径记作$\rho(A)=max_{1\leq i \leq n}|\lambda_i|$，$\lambda$是$A$的特征值。</li>
+<li>定理9：<strong>$A$的谱半径不超过$A$的任何一个矩阵范数</strong>，即$\rho(A)\leq ||A||$。</li>
+<li>定理10：设$A$是任意n阶方阵，由$A$的各次幂所组成的矩阵序列$I,A,\cdots,A^k$，收敛于0的<strong>充要条件</strong>是$\rho(A) &lt; 1$。</li>
+</ul>
+<h2 id="4-4-方程右端误差对解的影响"><a href="#4-4-方程右端误差对解的影响" class="headerlink" title="4.4 方程右端误差对解的影响"></a>4.4 方程右端误差对解的影响</h2><h2 id="4-5-系数矩阵误差对解的影响"><a href="#4-5-系数矩阵误差对解的影响" class="headerlink" title="4.5 系数矩阵误差对解的影响"></a>4.5 系数矩阵误差对解的影响</h2></div><div class="article-licensing box"><div class="licensing-title"><p>数值分析：第5章 解线性代数方程组的直接法</p><p><a href="http://harry-zzh.github.io/2021/05/09/NA-ch5/">http://harry-zzh.github.io/2021/05/09/NA-ch5/</a></p></div><div class="licensing-meta level is-mobile"><div class="level-left"><div class="level-item is-narrow"><div><h6>Author</h6><p>harry-zzh</p></div></div><div class="level-item is-narrow"><div><h6>Posted on</h6><p>2021-05-09</p></div></div><div class="level-item is-narrow"><div><h6>Updated on</h6><p>2021-05-13</p></div></div><div class="level-item is-narrow"><div><h6>Licensed under</h6><p><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a class="icon" rel="noopener" target="_blank" title="Attribution" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a><a class="icon" rel="noopener" target="_blank" title="Noncommercial" href="https://creativecommons.org/licenses/by-nc/4.0/"><i class="fab fa-creative-commons-nc"></i></a></p></div></div></div></div></div><hr style="height:1px;margin:1rem 0"><div class="level is-mobile is-flex"><div class="article-tags is-size-7 is-uppercase"><i class="fas fa-tags has-text-grey"></i> <a class="link-muted" rel="tag" href="/tags/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90/">数值分析 </a></div></div><!--!--></article></div><!--!--><nav class="post-navigation mt-4 level is-mobile"><div class="level-start"><a class="article-nav-prev level level-item link-muted" href="/2021/05/09/NA-ch6/"><i class="level-item fas fa-chevron-left"></i><span class="level-item">数值分析：第6章 解线性代数方程组的迭代法</span></a></div><div class="level-end"><a class="article-nav-next level level-item link-muted" href="/2021/05/09/NA-ch4/"><span class="level-item">数值分析：第4章 数值积分</span><i class="level-item fas fa-chevron-right"></i></a></div></nav><!--!--></div><div class="column column-left is-4-tablet is-4-desktop is-3-widescreen  order-1"><div class="card widget" data-type="profile"><div class="card-content"><nav class="level"><div class="level-item has-text-centered flex-shrink-1"><div><figure class="image is-128x128 mx-auto mb-2"><img class="avatar is-rounded" src="/img/avatar.png" alt="harry-zzh"></figure><p class="title is-size-4 is-block" style="line-height:inherit;">harry-zzh</p><p class="is-size-6 is-block">华南理工大学 计科</p><p class="is-size-6 is-flex justify-content-center"><i class="fas fa-map-marker-alt mr-1"></i><span>广东 广州</span></p></div></div></nav><nav class="level is-mobile"><div class="level-item has-text-centered is-marginless"><div><p class="heading">Posts</p><a href="/archives"><p class="title">31</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Categories</p><a href="/categories"><p class="title">3</p></a></div></div><div class="level-item has-text-centered is-marginless"><div><p class="heading">Tags</p><a href="/tags"><p class="title">7</p></a></div></div></nav><div class="level"><a class="level-item button is-primary is-rounded" href="https://github.com/Harry-zzh" target="_blank" rel="noopener">Follow</a></div></div></div><div class="card widget" id="toc" data-type="toc"><div class="card-content"><div class="menu"><h3 class="menu-label">Catalogue</h3><ul class="menu-list"><li><a class="level is-mobile" href="#1-高斯消去法"><span class="level-left"><span class="level-item">1. 高斯消去法</span></span></a></li><li><a class="level is-mobile" href="#1-1-顺序高斯消去法"><span class="level-left"><span class="level-item">1.1 顺序高斯消去法</span></span></a></li><li><a class="level is-mobile" href="#1-2-列主元高斯消去法"><span class="level-left"><span class="level-item">1.2 列主元高斯消去法</span></span></a></li><li><a class="level is-mobile" href="#1-3-全主元高斯消去法"><span class="level-left"><span class="level-item">1.3 全主元高斯消去法</span></span></a></li><li><a class="level is-mobile" href="#2-LU分解法"><span class="level-left"><span class="level-item">2. LU分解法</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#2-1-直接LU分解法"><span class="level-left"><span class="level-item">2.1 直接LU分解法</span></span></a></li><li><a class="level is-mobile" href="#2-2-列主元LU分解法"><span class="level-left"><span class="level-item">2.2 列主元LU分解法</span></span></a></li></ul></li><li><a class="level is-mobile" href="#3-对称正定矩阵的平方根法和分解法"><span class="level-left"><span class="level-item">3. 对称正定矩阵的平方根法和分解法</span></span></a></li><li><a class="level is-mobile" href="#4-向量与矩阵范数"><span class="level-left"><span class="level-item">4. 向量与矩阵范数</span></span></a><ul class="menu-list"><li><a class="level is-mobile" href="#4-1-向量范数"><span class="level-left"><span class="level-item">4.1 向量范数</span></span></a></li><li><a class="level is-mobile" href="#4-2-矩阵范数"><span class="level-left"><span class="level-item">4.2 矩阵范数</span></span></a></li><li><a class="level is-mobile" href="#4-3-谱半径"><span class="level-left"><span class="level-item">4.3 谱半径</span></span></a></li><li><a class="level is-mobile" href="#4-4-方程右端误差对解的影响"><span class="level-left"><span class="level-item">4.4 方程右端误差对解的影响</span></span></a></li><li><a class="level is-mobile" href="#4-5-系数矩阵误差对解的影响"><span class="level-left"><span class="level-item">4.5 系数矩阵误差对解的影响</span></span></a></li></ul></li></ul></div></div><style>#toc .menu-list > li > a.is-active + .menu-list { display: block; }#toc .menu-list > li > a + .menu-list { display: none; }</style><script src="/js/toc.js" defer></script></div></div><!--!--></div></div></section><footer class="footer"><div class="container"><div class="level"><div class="level-start"><a class="footer-logo is-block mb-2" href="/"><img src="/img/favicon.svg" alt="harry-zzh的博客" height="28"></a><p class="is-size-7"><span>&copy; 2021 harry-zzh</span>  Powered by <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> &amp; <a href="https://github.com/ppoffice/hexo-theme-icarus" target="_blank" rel="noopener">Icarus</a></p></div><div class="level-end"><div class="field has-addons"><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/"><i class="fab fa-creative-commons-by"></i></a></p><p class="control"><a class="button is-transparent is-large" target="_blank" rel="noopener" title="Download on GitHub" href="https://github.com/Harry-zzh"><i class="fab fa-github"></i></a></p></div></div></div></div></footer><script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script><script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script><script>moment.locale("en");</script><script>var IcarusThemeSettings = {
+            article: {
+                highlight: {
+                    clipboard: true,
+                    fold: 'unfolded'
+                }
+            }
+        };</script><script src="/js/column.js"></script><script src="/js/animation.js"></script><a id="back-to-top" title="Back to top" href="javascript:;"><i class="fas fa-chevron-up"></i></a><script src="/js/back_to_top.js" defer></script><!--!--><!--!--><!--!--><script src="https://cdn.jsdelivr.net/npm/cookieconsent@3.1.1/build/cookieconsent.min.js" defer></script><script>window.addEventListener("load", () => {
+      window.cookieconsent.initialise({
+        type: "info",
+        theme: "edgeless",
+        static: false,
+        position: "bottom-left",
+        content: {
+          message: "This website uses cookies to improve your experience.",
+          dismiss: "Got it!",
+          allow: "Allow cookies",
+          deny: "Decline",
+          link: "Learn more",
+          policy: "Cookie Policy",
+          href: "https://www.cookiesandyou.com/",
+        },
+        palette: {
+          popup: {
+            background: "#edeff5",
+            text: "#838391"
+          },
+          button: {
+            background: "#4b81e8"
+          },
+        },
+      });
+    });</script><script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script><script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script><script>window.addEventListener("load", () => {
+            if (typeof $.fn.lightGallery === 'function') {
+                $('.article').lightGallery({ selector: '.gallery-item' });
+            }
+            if (typeof $.fn.justifiedGallery === 'function') {
+                if ($('.justified-gallery > p > .gallery-item').length) {
+                    $('.justified-gallery > p > .gallery-item').unwrap();
+                }
+                $('.justified-gallery').justifiedGallery();
+            }
+        });</script><!--!--><!--!--><script type="text/x-mathjax-config">MathJax.Hub.Config({
+            'HTML-CSS': {
+                matchFontHeight: false
+            },
+            SVG: {
+                matchFontHeight: false
+            },
+            CommonHTML: {
+                matchFontHeight: false
+            },
+            tex2jax: {
+                inlineMath: [
+                    ['$','$'],
+                    ['\\(','\\)']
+                ]
+            }
+        });</script><script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script><!--!--><!--!--><!--!--><script src="/js/main.js" defer></script><div class="searchbox"><div class="searchbox-container"><div class="searchbox-header"><div class="searchbox-input-container"><input class="searchbox-input" type="text" placeholder="Type something..."></div><a class="searchbox-close" href="javascript:;">×</a></div><div class="searchbox-body"></div></div></div><script src="/js/insight.js" defer></script><script>document.addEventListener('DOMContentLoaded', function () {
+            loadInsight({"contentUrl":"/content.json"}, {"hint":"Type something...","untitled":"(Untitled)","posts":"Posts","pages":"Pages","categories":"Categories","tags":"Tags"});
+        });</script></body></html>
